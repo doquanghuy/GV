@@ -9,6 +9,12 @@ target 'ContactApp' do
   pod 'SkeletonView'
   pod 'Nuke'
   pod 'SwiftValidator', :git => 'https://github.com/jpotts18/SwiftValidator.git', :branch => 'master'
+  # Realm
+  pod 'RealmSwift', '3.13.0'
+  # Networking library
+  pod 'Alamofire', '4.7.3'
+  # Deal JSON data in Swift
+  pod 'SwiftyJSON', '4.1.0'
   
   target 'ContactAppTests' do
     inherit! :search_paths
