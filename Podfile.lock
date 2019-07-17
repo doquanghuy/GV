@@ -1,0 +1,33 @@
+PODS:
+  - Nuke (7.5.2)
+  - SkeletonView (1.4.1)
+  - SwiftValidator (4.0.0)
+
+DEPENDENCIES:
+  - Nuke
+  - SkeletonView
+  - SwiftValidator (from `https://github.com/jpotts18/SwiftValidator.git`, branch `master`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Nuke
+    - SkeletonView
+
+EXTERNAL SOURCES:
+  SwiftValidator:
+    :branch: master
+    :git: https://github.com/jpotts18/SwiftValidator.git
+
+CHECKOUT OPTIONS:
+  SwiftValidator:
+    :commit: c0ee801a2d107eca5f748d07932b449666d8effd
+    :git: https://github.com/jpotts18/SwiftValidator.git
+
+SPEC CHECKSUMS:
+  Nuke: 0350d346a688426e8f2331253ef28dc2fc4f6178
+  SkeletonView: 60d6ce7edb0cb4c7758db33c74add50392b3c475
+  SwiftValidator: 25ded5ca1f10c05adf57f6ac82a72d28ac8d91af
+
+PODFILE CHECKSUM: 0ac373d0417ccc7ad08d04d016bae7717f642179
+
+COCOAPODS: 1.6.0.beta.2
