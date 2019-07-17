@@ -6,7 +6,7 @@ import Foundation
 
 class ContactsViewModel {
     
-    private var contacts: [Contact] = []
+    var contacts = Dynamic<[Contact]>([])
     
     public func getContactList(completion: (() -> Void)?, errorCompletion: ((_ messages: String?) -> Void)?){
         APIManager.Contact.getContacts { (error, json) in
@@ -15,27 +15,25 @@ class ContactsViewModel {
             } else {
                 for jsonItem in json.arrayValue {
                     Contact.createOrUpdate(jsonItem)
-                    if let contact = Contact.findByID(id: jsonItem["id"].intValue) {
-                        self.contacts.append(contact)
-                    }
                 }
                 completion?()
             }
         }
     }
     
+    public func getAllContactFromDB() {
+        self.contacts.value = Contact.getAllContact()
+    }
+    
     public func cellViewModel(index: Int) -> ContactViewModel? {
-        guard contacts.count > 0 else { return nil }
-        
+        guard contacts.value.count > 0 else { return nil }
         let contactViewModel = ContactViewModel()
-        
-        contactViewModel.setData(contact: contacts[index])
-
+        contactViewModel.setData(contact: contacts.value[index])
         return contactViewModel
     }
 
     public var count: Int {
-        return contacts.count
+        return contacts.value.count
     }
     
 }

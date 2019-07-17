@@ -10,43 +10,56 @@ class ContactListController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViewModel()
+        setupBinding()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        viewModel.getContactList(completion: {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }) { (errorMessages) in
-            DispatchQueue.main.async {
-                let alertController = UIAlertController(title: "Error", message: errorMessages, preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                self.present(alertController, animated: true, completion: nil)
+    private func setupViewModel() {
+        viewModel.getAllContactFromDB()
+        DispatchQueue.global(qos: .background).async {
+            self.viewModel.getContactList(completion: {
+                self.viewModel.getAllContactFromDB()
+            }) { (errorMessages) in
+                DispatchQueue.main.async {
+                    self.presentErrorAlert(message: errorMessages)
+                }
             }
         }
     }
+    
+    private func setupBinding() {
+        viewModel.contacts.bind { (_) in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func presentErrorAlert(message: String?) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
 
-    // MARK: - Table view data source
-
+ // MARK: - Table view data source
+extension ContactListController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactListCell.reuseIdentifier, for: indexPath) as? ContactListCell
-
         let cellViewModel = viewModel.cellViewModel(index: indexPath.row)
         cell!.viewModel = cellViewModel
-        
         return cell!
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DetailContact") as? DetailContactController
         let cellViewModel = viewModel.cellViewModel(index: indexPath.row)

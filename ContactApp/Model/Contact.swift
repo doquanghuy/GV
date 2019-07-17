@@ -22,6 +22,12 @@ final class Contact: Object {
     }
 }
 
+extension Contact {
+    static func getAllContact() -> [Contact] {
+        return Contact.findAll().compactMap({ $0 })
+    }
+}
+
 // MARK: -BaseModel
 extension Contact: BaseModel {
     @discardableResult
