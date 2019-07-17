@@ -6,21 +6,26 @@ import Foundation
 
 class ContactsViewModel {
     
-    private let networking = Networking()
-    
-    private var contacts: [Contact]?
+    private var contacts: [Contact] = []
     
     public func getContactList(completion: (() -> Void)?, errorCompletion: ((_ messages: String?) -> Void)?){
-        networking.performNetworkTask(endpoint: APIServices.getContacts(), type: [Contact].self, completion: { (response) in
-            self.contacts = response
-            completion?()
-        }) { (errorMessages) in
-            errorCompletion?(errorMessages)
+        APIManager.Contact.getContacts { (error, json) in
+            if let error = error {
+                errorCompletion?(error.localizedDescription)
+            } else {
+                for jsonItem in json.arrayValue {
+                    Contact.createOrUpdate(jsonItem)
+                    if let contact = Contact.findByID(id: jsonItem["id"].intValue) {
+                        self.contacts.append(contact)
+                    }
+                }
+                completion?()
+            }
         }
     }
     
     public func cellViewModel(index: Int) -> ContactViewModel? {
-        guard let contacts = contacts else { return nil }
+        guard contacts.count > 0 else { return nil }
         
         let contactViewModel = ContactViewModel()
         
@@ -30,7 +35,7 @@ class ContactsViewModel {
     }
 
     public var count: Int {
-        return contacts?.count ?? 0
+        return contacts.count
     }
     
 }
