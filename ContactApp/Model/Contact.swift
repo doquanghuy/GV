@@ -24,9 +24,6 @@ final class Contact: Object {
 
 extension Contact {
     static let queue = DispatchQueue.global(qos: .background)
-    static func getAllContact() -> [Contact] {
-        return Contact.findAll().compactMap({ $0 })
-    }
 }
 
 // MARK: -BaseModel

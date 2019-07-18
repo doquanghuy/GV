@@ -8,6 +8,7 @@ class ContactsViewModel {
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
     private var contacts = [Contact]()
+    private lazy var resultContact = Contact.findAll()
     
     init() {
         obsever()
@@ -25,7 +26,7 @@ class ContactsViewModel {
     }
     
     private func obsever() {
-        RealmNotification.share.observeCollectionChange(collection: Contact.findAll())
+        RealmNotification.share.observeCollectionChange(collection: resultContact)
     }
     
     private func handleObsever() {
@@ -38,7 +39,7 @@ class ContactsViewModel {
     }
     
     public func getAllContactFromDB() {
-        self.contacts = Contact.getAllContact()
+        self.contacts = resultContact.compactMap({ $0 })
         self.shouldReloadData.value = true
     }
     
