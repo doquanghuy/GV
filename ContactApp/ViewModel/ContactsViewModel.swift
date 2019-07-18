@@ -13,17 +13,14 @@ class ContactsViewModel {
         handleObsever()
     }
     
-    public func getContactList(completion: (() -> Void)?, errorCompletion: ((_ messages: String?) -> Void)?){
-        DispatchQueue.global(qos: .background).async {
+    public func getContactList(errorCompletion: ((_ messages: String?) -> Void)?){
             APIManager.Contact.getContacts { (error, json) in
                 if let error = error {
                     errorCompletion?(error.localizedDescription)
                 } else {
                     Contact.createOrUpdate(json.arrayValue)
-                    completion?()
                 }
             }
-        }
     }
     
     private func obsever() {

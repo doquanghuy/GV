@@ -16,11 +16,9 @@ class ContactListController: UITableViewController {
     
     private func setupViewModel() {
         viewModel.getAllContactFromDB()
-        self.viewModel.getContactList(completion: {
-            self.viewModel.getAllContactFromDB()
-        }) { (errorMessages) in
+        viewModel.getContactList { (errorMessage) in
             DispatchQueue.main.async {
-                self.presentErrorAlert(message: errorMessages)
+                self.presentErrorAlert(message: errorMessage)
             }
         }
     }

@@ -23,6 +23,7 @@ final class Contact: Object {
 }
 
 extension Contact {
+    static let queue = DispatchQueue.global(qos: .background)
     static func getAllContact() -> [Contact] {
         return Contact.findAll().compactMap({ $0 })
     }
@@ -33,26 +34,30 @@ extension Contact: BaseModel {
     @discardableResult
     static func createOrUpdate(_ json: JSON) -> Int {
         let id = json["id"].intValue
-        let realm = try! Realm()
-        try! realm.write {
-            let contact = Contact.findByID(id: id) ?? Contact()
-            parseFromJSON(json: json, object: contact)
-            realm.add(contact, update: true)
+        queue.async {
+            let realm = try! Realm()
+            try! realm.write {
+                let contact = Contact.findByID(id: id) ?? Contact()
+                parseFromJSON(json: json, object: contact)
+                realm.add(contact, update: true)
+            }
         }
         return id
     }
     
     static func createOrUpdate(_ jsons: [JSON]) {
-        var contacts: [Contact] = []
-         let realm = try! Realm()
-        try! realm.write {
-            for json in jsons {
-                let id = json["id"].intValue
-                let contact = Contact.findByID(id: id) ?? Contact()
-                parseFromJSON(json: json, object: contact)
-                contacts.append(contact)
+        queue.async {
+            var contacts: [Contact] = []
+            let realm = try! Realm()
+            try! realm.write {
+                for json in jsons {
+                    let id = json["id"].intValue
+                    let contact = Contact.findByID(id: id) ?? Contact()
+                    parseFromJSON(json: json, object: contact)
+                    contacts.append(contact)
+                }
+                realm.add(contacts, update: true)
             }
-            realm.add(contacts, update: true)
         }
     }
 }
