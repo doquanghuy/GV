@@ -6,6 +6,7 @@ import Foundation
 
 class ContactsViewModel {
     var shouldReloadData = Dynamic<Bool>(false)
+    var errorMessage = Dynamic<String?>(nil)
     private var contacts = [Contact]()
     
     init() {
@@ -13,14 +14,14 @@ class ContactsViewModel {
         handleObsever()
     }
     
-    public func getContactList(errorCompletion: ((_ messages: String?) -> Void)?){
-            APIManager.Contact.getContacts { (error, json) in
-                if let error = error {
-                    errorCompletion?(error.localizedDescription)
-                } else {
-                    Contact.createOrUpdate(json.arrayValue)
-                }
+    public func getContactList(){
+        APIManager.Contact.getContacts { (error, json) in
+            if let error = error {
+                self.errorMessage.value = error.localizedDescription
+            } else {
+                Contact.createOrUpdate(json.arrayValue)
             }
+        }
     }
     
     private func obsever() {

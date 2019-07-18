@@ -16,11 +16,7 @@ class ContactListController: UITableViewController {
     
     private func setupViewModel() {
         viewModel.getAllContactFromDB()
-        viewModel.getContactList { (errorMessage) in
-            DispatchQueue.main.async {
-                self.presentErrorAlert(message: errorMessage)
-            }
-        }
+        viewModel.getContactList()
     }
     
     private func setupBinding() {
@@ -31,9 +27,15 @@ class ContactListController: UITableViewController {
                 }
             }
         }
+        viewModel.errorMessage.bind { (message) in
+            guard let message = message else { return }
+            DispatchQueue.main.async {
+                self.presentErrorAlert(message: message)
+            }
+        }
     }
     
-    private func presentErrorAlert(message: String?) {
+    private func presentErrorAlert(message: String) {
         let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
