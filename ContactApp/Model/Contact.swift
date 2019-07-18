@@ -41,6 +41,20 @@ extension Contact: BaseModel {
         }
         return id
     }
+    
+    static func createOrUpdate(_ jsons: [JSON]) {
+        var contacts: [Contact] = []
+         let realm = try! Realm()
+        try! realm.write {
+            for json in jsons {
+                let id = json["id"].intValue
+                let contact = Contact.findByID(id: id) ?? Contact()
+                parseFromJSON(json: json, object: contact)
+                contacts.append(contact)
+            }
+            realm.add(contacts, update: true)
+        }
+    }
 }
 
 // MARK: - MGModelJSONParsable

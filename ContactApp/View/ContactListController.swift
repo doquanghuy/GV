@@ -16,21 +16,21 @@ class ContactListController: UITableViewController {
     
     private func setupViewModel() {
         viewModel.getAllContactFromDB()
-        DispatchQueue.global(qos: .background).async {
-            self.viewModel.getContactList(completion: {
-                self.viewModel.getAllContactFromDB()
-            }) { (errorMessages) in
-                DispatchQueue.main.async {
-                    self.presentErrorAlert(message: errorMessages)
-                }
+        self.viewModel.getContactList(completion: {
+            self.viewModel.getAllContactFromDB()
+        }) { (errorMessages) in
+            DispatchQueue.main.async {
+                self.presentErrorAlert(message: errorMessages)
             }
         }
     }
     
     private func setupBinding() {
-        viewModel.contacts.bind { (_) in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        viewModel.shouldReloadData.bind { (shouldReload) in
+            if shouldReload {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }

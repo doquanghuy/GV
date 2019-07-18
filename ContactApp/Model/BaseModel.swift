@@ -11,6 +11,7 @@ import SwiftyJSON
 protocol BaseModel {
     associatedtype PrimaryKeyType
     static func createOrUpdate(_ json: JSON) -> PrimaryKeyType
+    static func createOrUpdate(_ jsons: [JSON])
 }
 extension BaseModel where Self: Object {
     static func findByID(id: PrimaryKeyType) -> Self? {
