@@ -21,9 +21,7 @@ class DetailContactController: UIViewController {
     @IBOutlet weak var mobileLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     
-    private let viewModel = ContactViewModel()
-    
-    var contactId = Int()
+    var viewModel: ContactViewModel?
     
     let greenColor = UIColor(red:0.31, green:0.89, blue:0.76, alpha:1.0)
     
@@ -31,49 +29,65 @@ class DetailContactController: UIViewController {
         super.viewDidLoad()
         self.createGradientLayer()
         self.navigationController?.navigationBar.tintColor = greenColor
+        setupBinding()
+        setupViewModel()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.nameLabel.showSkeleton()
-        self.emailLabel.showSkeleton()
-        self.profilPicImageView.showSkeleton()
-        
-        viewModel.getDetailContact(contactId: contactId, completion: {
+    private func setupViewModel() {
+        viewModel?.reloadData()
+        viewModel?.getDetailContact()
+    }
+    
+    private func setupBinding() {
+        viewModel?.errorMessage.bind {(message) in
+            guard let message = message else { return }
             DispatchQueue.main.async {
-                self.nameLabel.text = self.viewModel.fullName
-                self.emailLabel.text = self.viewModel.email
-                self.mobileLabel.text = self.viewModel.phoneNumber
-                
+                self.presentErrorAlert(message: message)
+            }
+        }
+        
+        viewModel?.fullName.bind {(fullName) in
+            self.nameLabel.text = fullName
+        }
+        
+        viewModel?.favorite.bind {(favorite) in
+            let image = favorite ? UIImage(named: "favorite_button_selected") :  UIImage(named: "favorite_button")
+            self.favoriteButton.setImage(image, for: UIControl.State.normal)
+        }
+        
+        viewModel?.urlProfilPic.bind {(imageURL) in
+            guard let url = imageURL, let profileURL = URL(string: url) else { return }
+            DispatchQueue.main.async {
                 Nuke.loadImage(
-                    with: self.viewModel.urlProfilPic,
+                    with: profileURL,
                     options: ImageLoadingOptions(
                         placeholder: UIImage(named: "placeholder_photo"),
                         transition: .fadeIn(duration: 0.33)
                     ),
                     into: self.profilPicImageView
                 )
-                
-                if (self.viewModel.favorite){
-                    self.favoriteButton.setImage(UIImage(named: "favorite_button_selected"), for: UIControl.State.normal)
-                }else {
-                    self.favoriteButton.setImage(UIImage(named: "favorite_button"), for: UIControl.State.normal)
-                }
-                
-                self.nameLabel.hideSkeleton()
-                self.emailLabel.hideSkeleton()
-                self.profilPicImageView.hideSkeleton()
             }
-        }) { (errorMessages) in
-            let alertController = UIAlertController(title: "Error", message: errorMessages, preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            alertController.addAction(cancelAction)
-            self.present(alertController, animated: true, completion: nil)
         }
+
+        viewModel?.email.bind({ (email) in
+            guard let email = email else { return }
+            self.emailLabel.text = email
+        })
+        
+        viewModel?.phoneNumber.bind({ (mobile) in
+            guard let mobile = mobile else { return }
+            self.mobileLabel.text = mobile
+        })
     }
     
-    func createGradientLayer() {
+    private func presentErrorAlert(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func createGradientLayer() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.headerView.bounds
         gradientLayer.colors = [UIColor.white.cgColor, UIColor(red:0.31, green:0.89, blue:0.76, alpha:0.3).cgColor]

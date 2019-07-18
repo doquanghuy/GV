@@ -41,6 +41,11 @@ class ContactsViewModel {
         guard resultContact.count > 0 else { return nil }
         return ContactCellViewModel(contact: resultContact[index])
     }
+    
+    public func contactViewModel(index: Int) -> ContactViewModel? {
+        guard resultContact.count > 0 else { return nil }
+        return ContactViewModel(contact: resultContact[index])
+    }
 
     public var count: Int {
         return resultContact.count

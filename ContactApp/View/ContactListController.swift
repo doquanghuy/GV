@@ -61,9 +61,7 @@ extension ContactListController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DetailContact") as? DetailContactController
-        let cellViewModel = viewModel.cellViewModel(index: indexPath.row)
-        
-//        vc?.contactId = cellViewModel!.contactId
+        vc?.viewModel = viewModel.contactViewModel(index: indexPath.row)
         self.navigationController?.pushViewController(vc!, animated: true)
     }
 }
