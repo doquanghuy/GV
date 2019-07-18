@@ -18,10 +18,10 @@ extension APIManager {
             APIManager.request(url: url, method: .get, params: [:], completion: completion)
         }
         
-//        static func loadStates(_ countryId: Int, completion: ((NSError?, JSON) -> Void)? = nil) {
-//            let params: [String: Any] = ["country_id": countryId]
-//            let url = MGAPIManager.apiEndPoint(endPoint: MGConstant.StringURL.Country.fetchCountryStages)
-//            MGAPIManager.request(url: url, method: .post, params: params, completion: completion)
-//        }
+        static func getContactDetail(_ contactId: Int, completion: ((NSError?, JSON) -> Void)? = nil) {
+            let url = APIManager.apiEndPoint(endPoint: Constant.StringURL.Contact.getContact, "\(contactId)")
+            APIManager.request(url: url, method: .get, params: [:], completion: completion)
+        }
+
     }
 }

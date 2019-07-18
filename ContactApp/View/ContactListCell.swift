@@ -3,6 +3,7 @@
 //
 
 import UIKit
+import Foundation
 import Nuke
 
 class ContactListCell: UITableViewCell {
@@ -12,29 +13,43 @@ class ContactListCell: UITableViewCell {
     @IBOutlet weak var favoriteButton: UIButton!
     
     public static let reuseIdentifier = "ContactCell"
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        profilPicImageView.layer.cornerRadius = profilPicImageView.bounds.width/2
-    }
-    
-    public var viewModel: ContactViewModel? {
+    private var viewModel: ContactCellViewModel? {
         didSet {
-            guard let viewModel = viewModel else { return }
-            
-            nameLabel.text = viewModel.fullName
-            favoriteButton.isHidden = !viewModel.favorite
-            
-            Nuke.loadImage(
-                with: viewModel.urlProfilPic,
-                options: ImageLoadingOptions(
-                    placeholder: UIImage(named: "placeholder_photo"),
-                    transition: .fadeIn(duration: 0.33)
-                ),
-                into: profilPicImageView
-            )
+            self.bindingData()
         }
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        profilPicImageView.layer.cornerRadius = profilPicImageView.bounds.width/2
+    }
+    
+    public func setupViewModel(viewModel: ContactCellViewModel?) {
+        self.viewModel = viewModel
+        self.viewModel?.reloadData()
+    }
+    
+    private func bindingData() {
+        viewModel?.fullName.bind {(fullName) in
+            self.nameLabel.text = fullName
+        }
+        
+        viewModel?.favorite.bind {(favorite) in
+            self.favoriteButton.isHidden = !favorite
+        }
+        
+        viewModel?.urlProfilPic.bind {(imageURL) in
+            guard let url = imageURL, let profileURL = URL(string: url) else { return }
+            DispatchQueue.main.async {
+                Nuke.loadImage(
+                    with: profileURL,
+                    options: ImageLoadingOptions(
+                        placeholder: UIImage(named: "placeholder_photo"),
+                        transition: .fadeIn(duration: 0.33)
+                    ),
+                    into: self.profilPicImageView
+                )
+            }
+        }
+    }
 }

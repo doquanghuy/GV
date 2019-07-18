@@ -15,7 +15,6 @@ class ContactListController: UITableViewController {
     }
     
     private func setupViewModel() {
-        viewModel.getAllContactFromDB()
         viewModel.getContactList()
     }
     
@@ -56,15 +55,13 @@ extension ContactListController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactListCell.reuseIdentifier, for: indexPath) as? ContactListCell
         let cellViewModel = viewModel.cellViewModel(index: indexPath.row)
-        cell!.viewModel = cellViewModel
+        cell?.setupViewModel(viewModel: cellViewModel)
         return cell!
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DetailContact") as? DetailContactController
-        let cellViewModel = viewModel.cellViewModel(index: indexPath.row)
-        
-        vc?.contactId = cellViewModel!.id
+        vc?.viewModel = viewModel.contactViewModel(index: indexPath.row)
         self.navigationController?.pushViewController(vc!, animated: true)
     }
 }

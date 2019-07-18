@@ -7,7 +7,6 @@ import Foundation
 class ContactsViewModel {
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
-    private var contacts = [Contact]()
     private lazy var resultContact = Contact.findAll()
     
     init() {
@@ -35,23 +34,21 @@ class ContactsViewModel {
     }
     
     @objc private func handleContactListChange(_ notification: Notification) {
-        self.getAllContactFromDB()
-    }
-    
-    public func getAllContactFromDB() {
-        self.contacts = resultContact.compactMap({ $0 })
         self.shouldReloadData.value = true
     }
+        
+    public func cellViewModel(index: Int) -> ContactCellViewModel? {
+        guard resultContact.count > 0 else { return nil }
+        return ContactCellViewModel(contact: resultContact[index])
+    }
     
-    public func cellViewModel(index: Int) -> ContactViewModel? {
-        guard contacts.count > 0 else { return nil }
-        let contactViewModel = ContactViewModel()
-        contactViewModel.setData(contact: contacts[index])
-        return contactViewModel
+    public func contactViewModel(index: Int) -> ContactViewModel? {
+        guard resultContact.count > 0 else { return nil }
+        return ContactViewModel(contact: resultContact[index])
     }
 
     public var count: Int {
-        return contacts.count
+        return resultContact.count
     }
     
 }
