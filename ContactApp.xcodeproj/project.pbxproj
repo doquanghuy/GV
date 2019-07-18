@@ -29,6 +29,8 @@
 		6745DFB422DF1DB30099E21B /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFB222DF1DB20099E21B /* Networking.swift */; };
 		6745DFB822DF1ED30099E21B /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFB722DF1ED30099E21B /* APIManager.swift */; };
 		6745DFBA22DF239D0099E21B /* API+Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFB922DF239D0099E21B /* API+Contact.swift */; };
+		6745DFBC22DF8A190099E21B /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFBB22DF8A180099E21B /* Dynamic.swift */; };
+		6745DFBE22E0275A0099E21B /* RealmNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFBD22E0275A0099E21B /* RealmNotification.swift */; };
 		9AB411DF5429A5342182FAF4 /* Pods_ContactApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669E1431C300BB63CE01E693 /* Pods_ContactApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +83,8 @@
 		6745DFB222DF1DB20099E21B /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		6745DFB722DF1ED30099E21B /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		6745DFB922DF239D0099E21B /* API+Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API+Contact.swift"; sourceTree = "<group>"; };
+		6745DFBB22DF8A180099E21B /* Dynamic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
+		6745DFBD22E0275A0099E21B /* RealmNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmNotification.swift; sourceTree = "<group>"; };
 		BF0BE7991DB48AD8C1100685 /* Pods-ContactApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactApp.debug.xcconfig"; path = "Target Support Files/Pods-ContactApp/Pods-ContactApp.debug.xcconfig"; sourceTree = "<group>"; };
 		CA0E0C72E4727CFBACC5306B /* Pods-ContactAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-ContactAppUITests/Pods-ContactAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D26386DF4658ECE7A71E53F3 /* Pods_ContactAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,6 +240,7 @@
 				1947A68E2224CA0C0052D5E6 /* Contact.swift */,
 				1947A69A2224CD0A0052D5E6 /* Response.swift */,
 				6745DFA922DF169F0099E21B /* BaseModel.swift */,
+				6745DFBD22E0275A0099E21B /* RealmNotification.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 		6745DFAD22DF18C70099E21B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				6745DFBB22DF8A180099E21B /* Dynamic.swift */,
 				6745DFB022DF1B1E0099E21B /* SwiftyJSONExt.swift */,
 				6745DFAE22DF18C70099E21B /* ModelJSONParsable.swift */,
 			);
@@ -498,10 +504,12 @@
 				6745DFB822DF1ED30099E21B /* APIManager.swift in Sources */,
 				1980AC7A2225578800FED46B /* DetailContactController.swift in Sources */,
 				1947A69F2224D41C0052D5E6 /* ContactListController.swift in Sources */,
+				6745DFBE22E0275A0099E21B /* RealmNotification.swift in Sources */,
 				1947A6A12224D8C90052D5E6 /* ContactListCell.swift in Sources */,
 				1947A655222458560052D5E6 /* AppDelegate.swift in Sources */,
 				6745DFB122DF1B1E0099E21B /* SwiftyJSONExt.swift in Sources */,
 				1947A6A32224DBA40052D5E6 /* ContactsViewModel.swift in Sources */,
+				6745DFBC22DF8A190099E21B /* Dynamic.swift in Sources */,
 				6745DFB422DF1DB30099E21B /* Networking.swift in Sources */,
 				1947A6932224CBEC0052D5E6 /* Config.swift in Sources */,
 			);

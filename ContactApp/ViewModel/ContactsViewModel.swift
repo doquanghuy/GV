@@ -5,32 +5,48 @@
 import Foundation
 
 class ContactsViewModel {
+    var shouldReloadData = Dynamic<Bool>(false)
+    var errorMessage = Dynamic<String?>(nil)
+    private var contacts = [Contact]()
+    private lazy var resultContact = Contact.findAll()
     
-    private var contacts: [Contact] = []
+    init() {
+        obsever()
+        handleObsever()
+    }
     
-    public func getContactList(completion: (() -> Void)?, errorCompletion: ((_ messages: String?) -> Void)?){
+    public func getContactList(){
         APIManager.Contact.getContacts { (error, json) in
             if let error = error {
-                errorCompletion?(error.localizedDescription)
+                self.errorMessage.value = error.localizedDescription
             } else {
-                for jsonItem in json.arrayValue {
-                    Contact.createOrUpdate(jsonItem)
-                    if let contact = Contact.findByID(id: jsonItem["id"].intValue) {
-                        self.contacts.append(contact)
-                    }
-                }
-                completion?()
+                Contact.createOrUpdate(json.arrayValue)
             }
         }
     }
     
+    private func obsever() {
+        RealmNotification.share.observeCollectionChange(collection: resultContact)
+    }
+    
+    private func handleObsever() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleContactListChange(_:)), name: NSNotification.Name(rawValue: RealmNotificationType.inital.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleContactListChange(_:)), name: NSNotification.Name(rawValue: RealmNotificationType.update.rawValue), object: nil)
+    }
+    
+    @objc private func handleContactListChange(_ notification: Notification) {
+        self.getAllContactFromDB()
+    }
+    
+    public func getAllContactFromDB() {
+        self.contacts = resultContact.compactMap({ $0 })
+        self.shouldReloadData.value = true
+    }
+    
     public func cellViewModel(index: Int) -> ContactViewModel? {
         guard contacts.count > 0 else { return nil }
-        
         let contactViewModel = ContactViewModel()
-        
         contactViewModel.setData(contact: contacts[index])
-
         return contactViewModel
     }
 
