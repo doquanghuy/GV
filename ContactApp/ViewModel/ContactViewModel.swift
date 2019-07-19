@@ -38,7 +38,7 @@ class ContactViewModel {
     
     public func getDetailContact() {
         guard let contactId = contact?.id else { return }
-        APIManager.Contact.getContactDetail(contactId) { (error, json) in
+        APIManager.APIContact.getContactDetail(contactId) { (error, json) in
             if let error = error {
                 self.errorMessage.value = error.localizedDescription
             } else {

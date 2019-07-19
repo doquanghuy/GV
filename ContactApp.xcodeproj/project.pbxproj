@@ -32,6 +32,8 @@
 		6745DFBC22DF8A190099E21B /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFBB22DF8A180099E21B /* Dynamic.swift */; };
 		6745DFBE22E0275A0099E21B /* RealmNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFBD22E0275A0099E21B /* RealmNotification.swift */; };
 		6745DFC022E0CE250099E21B /* ContactCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6745DFBF22E0CE250099E21B /* ContactCellViewModel.swift */; };
+		67A8CCA022E0E93700CC5CA5 /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A8CC9F22E0E93700CC5CA5 /* AddContactViewController.swift */; };
+		67A8CCA422E0F23700CC5CA5 /* AddContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A8CCA322E0F23700CC5CA5 /* AddContactViewModel.swift */; };
 		9AB411DF5429A5342182FAF4 /* Pods_ContactApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669E1431C300BB63CE01E693 /* Pods_ContactApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +89,8 @@
 		6745DFBB22DF8A180099E21B /* Dynamic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		6745DFBD22E0275A0099E21B /* RealmNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmNotification.swift; sourceTree = "<group>"; };
 		6745DFBF22E0CE250099E21B /* ContactCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCellViewModel.swift; sourceTree = "<group>"; };
+		67A8CC9F22E0E93700CC5CA5 /* AddContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
+		67A8CCA322E0F23700CC5CA5 /* AddContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContactViewModel.swift; sourceTree = "<group>"; };
 		BF0BE7991DB48AD8C1100685 /* Pods-ContactApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactApp.debug.xcconfig"; path = "Target Support Files/Pods-ContactApp/Pods-ContactApp.debug.xcconfig"; sourceTree = "<group>"; };
 		CA0E0C72E4727CFBACC5306B /* Pods-ContactAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ContactAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-ContactAppUITests/Pods-ContactAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D26386DF4658ECE7A71E53F3 /* Pods_ContactAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ContactAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,6 +227,7 @@
 				1947A6A22224DBA40052D5E6 /* ContactsViewModel.swift */,
 				1980AC77222546D500FED46B /* ContactViewModel.swift */,
 				6745DFBF22E0CE250099E21B /* ContactCellViewModel.swift */,
+				67A8CCA322E0F23700CC5CA5 /* AddContactViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -233,6 +238,7 @@
 				1947A69E2224D41C0052D5E6 /* ContactListController.swift */,
 				1947A6A02224D8C90052D5E6 /* ContactListCell.swift */,
 				1980AC792225578800FED46B /* DetailContactController.swift */,
+				67A8CC9F22E0E93700CC5CA5 /* AddContactViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -511,7 +517,9 @@
 				6745DFBE22E0275A0099E21B /* RealmNotification.swift in Sources */,
 				1947A6A12224D8C90052D5E6 /* ContactListCell.swift in Sources */,
 				1947A655222458560052D5E6 /* AppDelegate.swift in Sources */,
+				67A8CCA422E0F23700CC5CA5 /* AddContactViewModel.swift in Sources */,
 				6745DFB122DF1B1E0099E21B /* SwiftyJSONExt.swift in Sources */,
+				67A8CCA022E0E93700CC5CA5 /* AddContactViewController.swift in Sources */,
 				1947A6A32224DBA40052D5E6 /* ContactsViewModel.swift in Sources */,
 				6745DFBC22DF8A190099E21B /* Dynamic.swift in Sources */,
 				6745DFB422DF1DB30099E21B /* Networking.swift in Sources */,

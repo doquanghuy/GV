@@ -15,6 +15,8 @@ target 'ContactApp' do
   pod 'Alamofire', '4.7.3'
   # Deal JSON data in Swift
   pod 'SwiftyJSON', '4.1.0'
+  # keyboard handler
+  pod 'IQKeyboardManagerSwift', '6.3.0'
   
   target 'ContactAppTests' do
     inherit! :search_paths
