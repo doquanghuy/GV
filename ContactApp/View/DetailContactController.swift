@@ -4,7 +4,7 @@
 
 import UIKit
 import Nuke
-import SkeletonView
+import MessageUI
 
 class DetailContactController: UIViewController {
 
@@ -46,13 +46,21 @@ class DetailContactController: UIViewController {
             }
         }
         
+        viewModel?.updateErrorMessage.bind {(message) in
+            guard let message = message else { return }
+            DispatchQueue.main.async {
+                self.favoriteButton.isEnabled = true
+                self.presentErrorAlert(message: message)
+            }
+        }
+        
         viewModel?.fullName.bind {(fullName) in
             self.nameLabel.text = fullName
         }
         
         viewModel?.favorite.bind {(favorite) in
-            let image = favorite ? UIImage(named: "favorite_button_selected") :  UIImage(named: "favorite_button")
-            self.favoriteButton.setImage(image, for: UIControl.State.normal)
+            self.favoriteButton.isSelected = favorite
+            self.favoriteButton.isEnabled = true
         }
         
         viewModel?.urlProfilPic.bind {(imageURL) in
@@ -94,4 +102,54 @@ class DetailContactController: UIViewController {
         self.headerView.layer.insertSublayer(gradientLayer, at: 0)
     }    
 
+    //MARK: -IBAction
+    @IBAction func messageButtonDidClick(_ sender: Any) {
+        if (MFMessageComposeViewController.canSendText()) {
+            let controller = MFMessageComposeViewController()
+            if let phoneNumber = viewModel?.phoneNumber.value {
+                controller.recipients = [phoneNumber]
+            }
+            controller.messageComposeDelegate = self
+            self.present(controller, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func callButtonDidClick(_ sender: Any) {
+        guard let phoneNumber = viewModel?.phoneNumber.value, let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) else { return }
+        if #available(iOS 10, *) {
+            UIApplication.shared.open(url)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
+    @IBAction func emailButtonDidClick(_ sender: Any) {
+        if MFMailComposeViewController.canSendMail() {
+            let mailController = MFMailComposeViewController()
+            mailController.mailComposeDelegate = self
+            if let email = viewModel?.email.value {
+                mailController.setToRecipients([email])
+            }
+            self.present(mailController, animated: true)
+        }
+    }
+    
+    @IBAction func favoriteButtonDidClick(_ sender: Any) {
+        favoriteButton.isEnabled = false
+        favoriteButton.isSelected = !favoriteButton.isSelected
+        viewModel?.updateContact(favorite: favoriteButton.isSelected)
+    }
+    
+}
+
+extension DetailContactController: MFMessageComposeViewControllerDelegate {
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension DetailContactController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
