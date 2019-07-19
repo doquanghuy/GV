@@ -15,7 +15,7 @@ class ContactsViewModel {
     }
     
     public func getContactList(){
-        APIManager.Contact.getContacts { (error, json) in
+        APIManager.APIContact.getContacts { (error, json) in
             if let error = error {
                 self.errorMessage.value = error.localizedDescription
             } else {

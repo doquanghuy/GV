@@ -40,6 +40,11 @@ class ContactListController: UITableViewController {
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
     }
+    
+    // MARK: - IBAction
+    @IBAction func addContactButtonClick(_ sender: Any) {
+        self.performSegue(withIdentifier: "pushAddContactSegue", sender: nil)
+    }
 }
 
  // MARK: - Table view data source
