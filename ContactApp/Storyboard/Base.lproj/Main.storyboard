@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -60,6 +59,7 @@
                                         <constraint firstItem="gff-GO-nPo" firstAttribute="leading" secondItem="HZ5-7c-Spq" secondAttribute="trailing" constant="16" id="zsw-6K-QVg"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <accessibility key="accessibilityConfiguration" identifier="ContactCell"/>
                                 <connections>
                                     <outlet property="favoriteButton" destination="gff-GO-nPo" id="QzE-NI-tlR"/>
                                     <outlet property="nameLabel" destination="HZ5-7c-Spq" id="QNJ-Wl-yYy"/>
@@ -303,6 +303,7 @@
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <accessibility key="accessibilityConfiguration" identifier="DetailContact"/>
                         <constraints>
                             <constraint firstItem="A0c-GE-KQ1" firstAttribute="trailing" secondItem="2x2-fK-lWf" secondAttribute="trailing" id="VA7-yb-3yE"/>
                             <constraint firstItem="2x2-fK-lWf" firstAttribute="top" secondItem="A0c-GE-KQ1" secondAttribute="top" id="gLe-JU-Sxa"/>
@@ -408,6 +409,9 @@
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Input Your Fisrt Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HId-0x-beh">
                                                                 <rect key="frame" x="136" y="8" width="254" height="40"/>
+                                                                <accessibility key="accessibilityConfiguration" identifier="FirstName">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="46O-9p-NYh"/>
                                                                 </constraints>
@@ -450,6 +454,9 @@
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Input Your Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gMI-hR-3Lj">
                                                                 <rect key="frame" x="136" y="8" width="254" height="40"/>
+                                                                <accessibility key="accessibilityConfiguration" identifier="LastName">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="nH5-qR-woM"/>
                                                                 </constraints>
@@ -491,6 +498,9 @@
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Input Your Mobile" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z9D-4j-yAJ">
                                                                 <rect key="frame" x="136" y="8" width="254" height="40"/>
+                                                                <accessibility key="accessibilityConfiguration" identifier="Mobile">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="O67-cz-PvO"/>
                                                                 </constraints>
@@ -530,8 +540,11 @@
                                                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Input Your Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dOG-OL-tn8">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Input Your Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dOG-OL-tn8">
                                                                 <rect key="frame" x="136" y="8" width="254" height="40"/>
+                                                                <accessibility key="accessibilityConfiguration" identifier="Email">
+                                                                    <bool key="isElement" value="NO"/>
+                                                                </accessibility>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="5jN-ZM-XvG"/>
                                                                 </constraints>
@@ -593,6 +606,9 @@
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <accessibility key="accessibilityConfiguration" identifier="AddContactView">
+                            <bool key="isElement" value="NO"/>
+                        </accessibility>
                         <constraints>
                             <constraint firstItem="ubf-Sn-SgH" firstAttribute="height" secondItem="dwt-D3-mXX" secondAttribute="height" id="7tt-M7-Xg5"/>
                             <constraint firstItem="Bxq-AK-OUa" firstAttribute="leading" secondItem="jqL-SS-SQE" secondAttribute="leading" id="LEL-mk-LuK"/>

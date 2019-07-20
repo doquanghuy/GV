@@ -76,6 +76,7 @@ extension ContactListController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactListCell.reuseIdentifier, for: indexPath) as? ContactListCell
+        cell?.accessibilityIdentifier = "ContactCell_\(indexPath.section)_\(indexPath.row)"
         let cellViewModel = viewModel.cellViewModel(indexPath: indexPath)
         cell?.setupViewModel(viewModel: cellViewModel)
         return cell!
