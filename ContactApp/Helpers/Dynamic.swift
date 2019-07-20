@@ -1,9 +1,9 @@
 //
-//  Observable.swift
-//  SurveyForm
+//  Dynamic.swift
+//  ContactApp
 //
-//  Created by Tung Tran on 1/14/19.
-//  Copyright © 2019 tungtran. All rights reserved.
+//  Created by Quang Huy on 7/18/19.
+//  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
 import Foundation
@@ -22,7 +22,7 @@ final class Dynamic<T> {
         self.value = value
     }
     
-   func bind(_ listener: @escaping Listener) {
+    func bind(_ listener: @escaping Listener) {
         listeners.append(listener)
     }
     

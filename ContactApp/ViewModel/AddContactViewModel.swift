@@ -2,11 +2,12 @@
 //  AddContactViewModel.swift
 //  ContactApp
 //
-//  Created by Ha Ho on 7/19/19.
+//  Created by Quang Huy on 7/19/19.
 //  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
 import UIKit
+import Alamofire
 
 class AddContactViewModel {
     
@@ -14,7 +15,7 @@ class AddContactViewModel {
     var success = Dynamic<Bool>(false)
     
     private var tempContact = Contact()
-    
+    private var request: Request?
     func setFirstName(name: String?) {
         self.tempContact.first_name = name ?? ""
     }
@@ -32,13 +33,17 @@ class AddContactViewModel {
     }
     
     func createContact() {
-        APIManager.APIContact.createContact(tempContact) { (error, json) in
+        self.request = APIManager.APIContact.createContact(tempContact) {[weak self] (error, json) in
             if let error = error {
-                self.errorMessage.value = error.localizedDescription
+                self?.errorMessage.value = error.localizedDescription
             } else {
-                self.success.value = true
+                self?.success.value = true
                 Contact.createOrUpdate(json)
             }
         }
+    }
+    
+    deinit {
+        self.request?.cancel()
     }
 }

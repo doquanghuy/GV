@@ -3,21 +3,24 @@
 //
 
 import Foundation
+import Alamofire
 
 class ContactsViewModel {
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
-    private lazy var resultContact = Contact.findAll()
     
+    private var request: Request?
+    private lazy var sections = Group.findAll().sorted(byKeyPath: "id")
+
     init() {
         obsever()
         handleObsever()
     }
     
     public func getContactList(){
-        APIManager.APIContact.getContacts { (error, json) in
+        self.request = APIManager.APIContact.getContacts {[weak self] (error, json) in
             if let error = error {
-                self.errorMessage.value = error.localizedDescription
+                self?.errorMessage.value = error.localizedDescription
             } else {
                 Contact.createOrUpdate(json.arrayValue)
             }
@@ -25,7 +28,7 @@ class ContactsViewModel {
     }
     
     private func obsever() {
-        RealmNotification.share.observeCollectionChange(collection: resultContact)
+        RealmNotification.share.observeCollectionChange(collection: sections)
     }
     
     private func handleObsever() {
@@ -36,19 +39,30 @@ class ContactsViewModel {
     @objc private func handleContactListChange(_ notification: Notification) {
         self.shouldReloadData.value = true
     }
-        
-    public func cellViewModel(index: Int) -> ContactCellViewModel? {
-        guard resultContact.count > 0 else { return nil }
-        return ContactCellViewModel(contact: resultContact[index])
+    
+    public func cellViewModel(indexPath: IndexPath) -> ContactCellViewModel? {
+        guard !sections.isEmpty else { return nil }
+        return ContactCellViewModel(contact: sections[indexPath.section].contacts[indexPath.row])
     }
     
-    public func contactViewModel(index: Int) -> ContactViewModel? {
-        guard resultContact.count > 0 else { return nil }
-        return ContactViewModel(contact: resultContact[index])
-    }
-
-    public var count: Int {
-        return resultContact.count
+    public func contactViewModel(indexPath: IndexPath) -> ContactViewModel? {
+        guard !sections.isEmpty else { return nil }
+        return ContactViewModel(contact: sections[indexPath.section].contacts[indexPath.row])
     }
     
+    public func titleForHeader(_ section: Int) -> String {
+        return sections[section].id
+    }
+    
+    public func numberOfRowsInSections(_ section: Int) -> Int {
+        return sections[section].contacts.count
+    }
+    
+    public var sectionNumber: Int {
+        return sections.count
+    }
+    
+    deinit {
+        self.request?.cancel()
+    }
 }

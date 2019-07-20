@@ -3,10 +3,12 @@
 //
 
 import Foundation
-
+import Alamofire
 class ContactViewModel {
     
     private var contact: Contact?
+    private var detailRequest: Request?
+    private var favoriteRequest: Request?
     
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
@@ -38,9 +40,9 @@ class ContactViewModel {
     
     public func getDetailContact() {
         guard let contactId = contact?.id else { return }
-        APIManager.APIContact.getContactDetail(contactId) { (error, json) in
+        self.detailRequest = APIManager.APIContact.getContactDetail(contactId) {[weak self] (error, json) in
             if let error = error {
-                self.errorMessage.value = error.localizedDescription
+                self?.errorMessage.value = error.localizedDescription
             } else {
                 Contact.createOrUpdate(json)
             }
@@ -59,12 +61,17 @@ class ContactViewModel {
     public func updateContact(favorite: Bool) {
         guard let contact = contact else { return }
         let params: [String: Any] = ["favorite": favorite]
-        APIManager.APIContact.updateContact(contact.id, params: params){ (error, json) in
+        self.favoriteRequest = APIManager.APIContact.updateContact(contact.id, params: params){[weak self] (error, json) in
             if let error = error {
-                self.updateErrorMessage.value = error.localizedDescription
+                self?.updateErrorMessage.value = error.localizedDescription
             } else {
                 Contact.createOrUpdate(json)
             }
         }
+    }
+    
+    deinit {
+        self.detailRequest?.cancel()
+        self.favoriteRequest?.cancel()
     }
 }

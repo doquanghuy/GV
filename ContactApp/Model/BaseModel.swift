@@ -1,7 +1,10 @@
-
 //
-// BaseModel.swift
-
+//  BaseModel.swift
+//  ContactApp
+//
+//  Created by Quang Huy on 7/18/19.
+//  Copyright © 2019 RezaIlham. All rights reserved.
+//
 
 import Foundation
 import RealmSwift
@@ -10,9 +13,8 @@ import SwiftyJSON
 
 protocol BaseModel {
     associatedtype PrimaryKeyType
-    static func createOrUpdate(_ json: JSON) -> PrimaryKeyType
-    static func createOrUpdate(_ jsons: [JSON])
 }
+
 extension BaseModel where Self: Object {
     static func findByID(id: PrimaryKeyType) -> Self? {
         let realm = try! Realm()
@@ -27,4 +29,3 @@ extension BaseModel where Self: Object {
         return realm.objects(Self.self)
     }
 }
-

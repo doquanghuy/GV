@@ -1,9 +1,9 @@
 //
 //  SwiftyJSONExt.swift
-//  Twine
+//  ContactApp
 //
-//  Created by Thanh Nguyen on 2/28/16.
-//  Copyright © 2016 Mingle. All rights reserved.
+//  Created by Quang Huy on 7/17/19.
+//  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
 import Foundation
@@ -26,7 +26,7 @@ extension JSON {
         }
     }
     
-
+    
     fileprivate func asType(_ type: JsonType) -> AnyObject? {
         switch type {
         case .stringType:
@@ -41,7 +41,7 @@ extension JSON {
             return self.double as AnyObject?
         }
     }
-
+    
     func populateObject(_ object: AnyObject, mapper: [String: [String]]) {
         for key in self.dictionaryValue.keys {
             if let attributes = mapper[key] {

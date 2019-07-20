@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import RealmSwift
 import SwiftyJSON
 import RealmSwift
 
@@ -16,45 +15,67 @@ final class Contact: Object {
     dynamic var favorite: Bool = false
     dynamic var email: String? = nil
     dynamic var phone_number: String? = nil
+    dynamic var group: Group?
     
     override class func primaryKey() -> String {
         return "id"
     }
 }
 
-extension Contact {
-    static let queue = DispatchQueue.global(qos: .background)
-}
-
 // MARK: -BaseModel
 extension Contact: BaseModel {
-    @discardableResult
-    static func createOrUpdate(_ json: JSON) -> Int {
-        let id = json["id"].intValue
-        queue.async {
+    typealias PrimaryKeyType = Int
+    
+    static func createOrUpdate(_ json: JSON, completion: ((_ contact: Contact?) -> Void)? = nil) {
+        Constant.ConcurrentQueue.queue.async {
             let realm = try! Realm()
+            var contact: Contact!
+            
             try! realm.write {
-                let contact = Contact.findByID(id: id) ?? Contact()
+                let id = json["id"].intValue
+                contact = Contact.findByID(id: id) ?? Contact()
                 parseFromJSON(json: json, object: contact)
+                
+                let name = contact.first_name
+                var firstCharacter: String = (name.first != nil) ? String(name.first!) : "N/A"
+                firstCharacter = firstCharacter.isAlphabet ? firstCharacter.uppercased() : "N/A"
+                var group = realm.object(ofType: Group.self, forPrimaryKey: firstCharacter)
+                if group == nil {
+                    group = Group()
+                    group?.id = firstCharacter
+                }
+                contact.group = group
                 realm.add(contact, update: true)
             }
+            completion?(contact)
         }
-        return id
     }
     
-    static func createOrUpdate(_ jsons: [JSON]) {
-        queue.async {
-            var contacts: [Contact] = []
+    static func createOrUpdate(_ jsons: [JSON], completion: ((_ contacts: [Contact]) -> Void)? = nil) {
+        Constant.ConcurrentQueue.queue.async {
             let realm = try! Realm()
+            var contacts = [Contact]()
+            
             try! realm.write {
                 for json in jsons {
                     let id = json["id"].intValue
                     let contact = Contact.findByID(id: id) ?? Contact()
                     parseFromJSON(json: json, object: contact)
+                    
+                    let name = contact.first_name
+                    var firstCharacter: String = (name.first != nil) ? String(name.first!) : "N/A"
+                    firstCharacter = firstCharacter.isAlphabet ? firstCharacter.uppercased() : "N/A"
+                    var group = realm.object(ofType: Group.self, forPrimaryKey: firstCharacter)
+                    if group == nil {
+                        group = Group()
+                        group?.id = firstCharacter
+                    }
+                    contact.group = group
                     contacts.append(contact)
                 }
                 realm.add(contacts, update: true)
             }
+            completion?(contacts)
         }
     }
 }
@@ -73,7 +94,6 @@ extension Contact: ModelJSONParsable {
     }
     
     static func parseCustomFields(json: JSON, object: Contact) {
-         if object.realm == nil { object.id = json["id"].intValue }
+        if object.realm == nil { object.id = json["id"].intValue }
     }
 }
-

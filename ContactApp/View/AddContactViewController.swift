@@ -2,7 +2,7 @@
 //  AddContactViewController.swift
 //  ContactApp
 //
-//  Created by Ha Ho on 7/19/19.
+//  Created by Quang Huy on 7/19/19.
 //  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
@@ -58,7 +58,7 @@ class AddContactViewController: UIViewController {
             }
         }
     }
-
+    
     private func presentErrorAlert(message: String) {
         let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

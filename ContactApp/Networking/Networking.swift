@@ -1,9 +1,5 @@
 //
 //  Networking.swift
-//  Niche
-//
-//  Created by Tung Tran on 11/28/18.
-//  Copyright © 2018 Mingle2. All rights reserved.
 //
 
 import Foundation
@@ -61,7 +57,7 @@ extension Networking {
 // MARK: - Request
 extension Networking {
     static func request(url: String, method: Networking.HTTPMethod, params: [String: Any], encoding: ParamEncoding? = nil,
-                        headers: [String: String]? = nil, completion: ((NSError?, JSON) -> Void)?) {
+                        headers: [String: String]? = nil, completion: ((NSError?, JSON) -> Void)?) -> Request? {
         var paramEncoding = encoding
         if paramEncoding == nil {
             switch method {
@@ -71,11 +67,10 @@ extension Networking {
                 paramEncoding = .urlDefault
             }
         }
-        
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
-        Alamofire.request(url, method: method.alamofireMethod, parameters: params, encoding: paramEncoding!.alamofireEncoding, headers: headers)
+        return Alamofire.request(url, method: method.alamofireMethod, parameters: params, encoding: paramEncoding!.alamofireEncoding, headers: headers)
             .validate()
             .responseString { (response) in
                 DispatchQueue.main.async {
@@ -92,14 +87,14 @@ extension Networking {
                 case .success(let value):
                     completion?(nil, JSON(parseJSON: value))
                 }
-            }
+        }
     }
 }
 
 // MARK: - Download file
 extension Networking {
-    static func downloadFile(stringURL: String, completion: @escaping (NSError?, URL?) -> Void) {
-        Alamofire.download(stringURL).response { (response) in
+    static func downloadFile(stringURL: String, completion: @escaping (NSError?, URL?) -> Void) -> DownloadRequest? {
+        return Alamofire.download(stringURL).response { (response) in
             if let error = response.error {
                 let nsError = error as NSError
                 completion(nsError, nil)

@@ -7,12 +7,12 @@ import Nuke
 import MessageUI
 
 class DetailContactController: UIViewController {
-
+    
     @IBOutlet weak var headerView: UIView!
     
     @IBOutlet weak var profilPicImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-
+    
     @IBOutlet weak var messagesButton: UIButton!
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var emailButton: UIButton!
@@ -76,7 +76,7 @@ class DetailContactController: UIViewController {
                 )
             }
         }
-
+        
         viewModel?.email.bind({ (email) in
             guard let email = email else { return }
             self.emailLabel.text = email
@@ -100,8 +100,8 @@ class DetailContactController: UIViewController {
         gradientLayer.frame = self.headerView.bounds
         gradientLayer.colors = [UIColor.white.cgColor, UIColor(red:0.31, green:0.89, blue:0.76, alpha:0.3).cgColor]
         self.headerView.layer.insertSublayer(gradientLayer, at: 0)
-    }    
-
+    }
+    
     //MARK: -IBAction
     @IBAction func messageButtonDidClick(_ sender: Any) {
         if (MFMessageComposeViewController.canSendText()) {
@@ -153,3 +153,4 @@ extension DetailContactController: MFMailComposeViewControllerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 }
+

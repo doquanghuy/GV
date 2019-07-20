@@ -2,7 +2,7 @@
 //  ContactCellViewModel.swift
 //  ContactApp
 //
-//  Created by Ha Ho on 7/18/19.
+//  Created by Quang Huy on 7/19/19.
 //  Copyright © 2019 RezaIlham. All rights reserved.
 //
 

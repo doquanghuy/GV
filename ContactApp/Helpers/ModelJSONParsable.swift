@@ -2,7 +2,7 @@
 //  ModelJSONParsable.swift
 //  ContactApp
 //
-//  Created by Ha Ho on 7/17/19.
+//  Created by Quang Huy on 7/17/19.
 //  Copyright © 2019 RezaIlham. All rights reserved.
 //
 

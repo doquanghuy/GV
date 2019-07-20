@@ -2,7 +2,7 @@
 //  RealmNotification.swift
 //  ContactApp
 //
-//  Created by Ha Ho on 7/18/19.
+//  Created by Quang Huy on 7/18/19.
 //  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
@@ -22,12 +22,12 @@ final class RealmNotification {
     var collectionToken : NotificationToken?
     var objectToken: NotificationToken?
     
-    func observeCollectionChange(collection: Results<Contact>) {
+    func observeCollectionChange(collection: Results<Group>) {
         collectionToken = collection.observe({ (changes: RealmCollectionChange) in
             switch changes {
             case .initial(_):
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: RealmNotificationType.inital.rawValue), object: collection)
-            case .update(_, _, _, _): 
+            case .update(_, _, _, _):
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: RealmNotificationType.update.rawValue), object: collection)
             case .error(_):
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: RealmNotificationType.error.rawValue), object: collection)

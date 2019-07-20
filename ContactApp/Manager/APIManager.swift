@@ -1,19 +1,20 @@
 //
 //  APIManager.swift
-//  Niche
+//  ContactApp
 //
-//  Created by Tung Tran on 11/28/18.
-//  Copyright © 2018 Mingle2. All rights reserved.
+//  Created by Quang Huy on 7/17/19.
+//  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 struct APIManager {
     private init() {}
     
     static var headers: [String: String] {
-      return [
+        return [
             "Content-Type": "application/json"
         ]
     }
@@ -23,12 +24,12 @@ struct APIManager {
     }
     
     static func request(url: String, method: Networking.HTTPMethod, params: [String: Any], encoding: Networking.ParamEncoding? = nil,
-                        completion: ((NSError?, JSON) -> Void)?) {
-        Networking.request(url: url, method: method, params: params, encoding: encoding, headers: headers) { (error, json) in
+                        completion: ((NSError?, JSON) -> Void)?) -> Request? {
+        return Networking.request(url: url, method: method, params: params, encoding: encoding, headers: headers) { (error, json) in
             if let error = error {
                 completion?(validateError(networkError: error, response: json), json)
             } else {
-               completion?(nil, json)
+                completion?(nil, json)
             }
         }
     }

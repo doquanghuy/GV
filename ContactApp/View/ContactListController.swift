@@ -7,7 +7,7 @@ import UIKit
 class ContactListController: UITableViewController {
     
     private let viewModel = ContactsViewModel()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewModel()
@@ -47,26 +47,31 @@ class ContactListController: UITableViewController {
     }
 }
 
- // MARK: - Table view data source
+// MARK: - Table view data source
 extension ContactListController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return viewModel.sectionNumber
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.titleForHeader(section)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.count
+        return viewModel.numberOfRowsInSections(section)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactListCell.reuseIdentifier, for: indexPath) as? ContactListCell
-        let cellViewModel = viewModel.cellViewModel(index: indexPath.row)
+        let cellViewModel = viewModel.cellViewModel(indexPath: indexPath)
         cell?.setupViewModel(viewModel: cellViewModel)
         return cell!
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DetailContact") as? DetailContactController
-        vc?.viewModel = viewModel.contactViewModel(index: indexPath.row)
+        vc?.viewModel = viewModel.contactViewModel(indexPath: indexPath)
         self.navigationController?.pushViewController(vc!, animated: true)
     }
 }
+
