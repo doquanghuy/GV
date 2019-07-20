@@ -10,7 +10,7 @@ class ContactViewModel {
     
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
-
+    var updateErrorMessage = Dynamic<String?>(nil)
     var fullName = Dynamic<String>("")
     var email = Dynamic<String?>(nil)
     var phoneNumber = Dynamic<String?>(nil)
@@ -56,31 +56,15 @@ class ContactViewModel {
         favorite.value = contact.favorite
     }
     
-    public func updateContact(first_name: String, last_name: String, email: String?, phone_number: String?, favorite: Bool, completion: (() -> Void)?, errorCompletion: ((_ messages: String?) -> Void)?){
-//        networking.performNetworkTask(endpoint: APIServices.updateContact(
-//            id: (contact?.id)!,
-//            first_name: first_name,
-//            last_name: last_name,
-//            email: email,
-//            phone_number: phone_number,
-//            favorite: favorite), type: Contact.self, completion: { (response) in
-//            self.contact = response
-//            completion?()
-//        }) { (errorMessages) in
-//            errorCompletion?(errorMessages)
-//        }
-    }
-    
-    public func addContact(first_name: String, last_name: String, email: String?, phone_number: String?, completion: (() -> Void)?, errorCompletion: ((_ messages: String?) -> Void)?){
-//        networking.performNetworkTask(endpoint: APIServices.addContact(
-//            first_name: first_name,
-//            last_name: last_name,
-//            email: email,
-//            phone_number: phone_number), type: Contact.self, completion: { (response) in
-//                self.contact = response
-//                completion?()
-//        }) { (errorMessages) in
-//            errorCompletion?(errorMessages)
-//        }
+    public func updateContact(favorite: Bool) {
+        guard let contact = contact else { return }
+        let params: [String: Any] = ["favorite": favorite]
+        APIManager.APIContact.updateContact(contact.id, params: params){ (error, json) in
+            if let error = error {
+                self.updateErrorMessage.value = error.localizedDescription
+            } else {
+                Contact.createOrUpdate(json)
+            }
+        }
     }
 }

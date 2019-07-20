@@ -62,12 +62,20 @@ extension Networking {
 extension Networking {
     static func request(url: String, method: Networking.HTTPMethod, params: [String: Any], encoding: ParamEncoding? = nil,
                         headers: [String: String]? = nil, completion: ((NSError?, JSON) -> Void)?) {
-        let paramEncoding = encoding ?? (method == .post ? .jsonDefault : .urlDefault)
+        var paramEncoding = encoding
+        if paramEncoding == nil {
+            switch method {
+            case .post, .put:
+                paramEncoding = .jsonDefault
+            default:
+                paramEncoding = .urlDefault
+            }
+        }
         
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
         }
-        Alamofire.request(url, method: method.alamofireMethod, parameters: params, encoding: paramEncoding.alamofireEncoding, headers: headers)
+        Alamofire.request(url, method: method.alamofireMethod, parameters: params, encoding: paramEncoding!.alamofireEncoding, headers: headers)
             .validate()
             .responseString { (response) in
                 DispatchQueue.main.async {

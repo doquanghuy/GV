@@ -32,6 +32,12 @@ extension APIManager {
             "favorite": false]
             APIManager.request(url: url, method: .post, params: params, completion: completion)
         }
+        
+        static func updateContact(_ contactId: Int, params: [String: Any], completion: ((NSError?, JSON) -> Void)? = nil) {
+            let url = APIManager.apiEndPoint(endPoint: Constant.StringURL.Contact.updateContact, "\(contactId)")
+            APIManager.request(url: url, method: .put, params: params, completion: completion)
+        }
+
 
     }
 }

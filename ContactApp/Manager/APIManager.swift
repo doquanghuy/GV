@@ -35,7 +35,7 @@ struct APIManager {
     
     private static func validateError(networkError: NSError, response: JSON) -> NSError {
         var messageError  = "Something Wrong"
-        if let message = response["errors"].string {
+        if let message = response["errors"].arrayValue.first?.string {
             messageError = message
         }
         return NSError(domain: networkError.domain, code: networkError.code, userInfo: [NSLocalizedDescriptionKey: messageError])
