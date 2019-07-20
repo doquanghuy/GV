@@ -7,24 +7,21 @@ import Nuke
 import MessageUI
 
 class DetailContactController: UIViewController {
-    
     @IBOutlet weak var headerView: UIView!
-    
     @IBOutlet weak var profilPicImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    
     @IBOutlet weak var messagesButton: UIButton!
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var emailButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
-    
     @IBOutlet weak var mobileLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     
     var viewModel: ContactViewModel?
+    weak var delegate: UpdateListContact?
     
     let greenColor = UIColor(red:0.31, green:0.89, blue:0.76, alpha:1.0)
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createGradientLayer()
@@ -39,32 +36,36 @@ class DetailContactController: UIViewController {
     }
     
     private func setupBinding() {
-        viewModel?.errorMessage.bind {(message) in
+        viewModel?.errorMessage.bind {[weak self](message) in
             guard let message = message else { return }
             DispatchQueue.main.async {
-                self.presentErrorAlert(message: message)
+                self?.presentErrorAlert(message: message)
             }
         }
         
-        viewModel?.updateErrorMessage.bind {(message) in
+        viewModel?.updateErrorMessage.bind {[weak self](message) in
             guard let message = message else { return }
             DispatchQueue.main.async {
-                self.favoriteButton.isEnabled = true
-                self.presentErrorAlert(message: message)
+                self?.favoriteButton.isEnabled = true
+                self?.presentErrorAlert(message: message)
             }
         }
         
-        viewModel?.fullName.bind {(fullName) in
-            self.nameLabel.text = fullName
+        viewModel?.fullName.bind {[weak self](fullName) in
+            DispatchQueue.main.async {
+                self?.nameLabel.text = fullName
+            }
         }
         
-        viewModel?.favorite.bind {(favorite) in
-            self.favoriteButton.isSelected = favorite
-            self.favoriteButton.isEnabled = true
+        viewModel?.favorite.bind {[weak self](favorite) in
+            DispatchQueue.main.async {
+                self?.favoriteButton.isSelected = favorite
+                self?.favoriteButton.isEnabled = true
+            }
         }
         
-        viewModel?.urlProfilPic.bind {(imageURL) in
-            guard let url = imageURL, let profileURL = URL(string: url) else { return }
+        viewModel?.urlProfilPic.bind {[weak self](imageURL) in
+            guard let this = self, let url = imageURL, let profileURL = URL(string: url) else { return }
             DispatchQueue.main.async {
                 Nuke.loadImage(
                     with: profileURL,
@@ -72,19 +73,27 @@ class DetailContactController: UIViewController {
                         placeholder: UIImage(named: "placeholder_photo"),
                         transition: .fadeIn(duration: 0.33)
                     ),
-                    into: self.profilPicImageView
+                    into: this.profilPicImageView
                 )
             }
         }
         
-        viewModel?.email.bind({ (email) in
-            guard let email = email else { return }
-            self.emailLabel.text = email
+        viewModel?.email.bind({[weak self] (email) in
+            DispatchQueue.main.async {
+                self?.emailLabel.text = email
+            }
         })
         
-        viewModel?.phoneNumber.bind({ (mobile) in
-            guard let mobile = mobile else { return }
-            self.mobileLabel.text = mobile
+        viewModel?.phoneNumber.bind({[weak self] (mobile) in
+            DispatchQueue.main.async {
+                self?.mobileLabel.text = mobile
+            }
+        })
+        
+        viewModel?.didUpdateContact.bind({[weak self] indexPath in
+            DispatchQueue.main.async {
+                self?.delegate?.reload(at: indexPath)
+            }
         })
     }
     

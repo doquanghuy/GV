@@ -4,11 +4,12 @@
 
 import Foundation
 import Alamofire
+
 class ContactViewModel {
-    
-    private var contact: Contact?
     private var detailRequest: Request?
     private var favoriteRequest: Request?
+    private var indexPath: IndexPath!
+    private var contactId: Int!
     
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
@@ -18,28 +19,14 @@ class ContactViewModel {
     var phoneNumber = Dynamic<String?>(nil)
     var urlProfilPic = Dynamic<String?>(nil)
     var favorite = Dynamic<Bool>(false)
+    var didUpdateContact = Dynamic<IndexPath>(IndexPath())
     
-    init(contact: Contact) {
-        self.contact = contact
-        obsever()
-        handleObsever()
-    }
-    
-    private func obsever() {
-        guard let contact = contact else { return }
-        RealmNotification.share.observerObjectChanged(object: contact)
-    }
-    
-    private func handleObsever() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleContactChange(_:)), name: NSNotification.Name(rawValue: RealmNotificationType.change.rawValue), object: nil)
-    }
-    
-    @objc private func handleContactChange(_ notification: Notification) {
-        reloadData()
+    init(contactId: Int, at indexPath: IndexPath) {
+        self.contactId = contactId
+        self.indexPath = indexPath
     }
     
     public func getDetailContact() {
-        guard let contactId = contact?.id else { return }
         self.detailRequest = APIManager.APIContact.getContactDetail(contactId) {[weak self] (error, json) in
             if let error = error {
                 self?.errorMessage.value = error.localizedDescription
@@ -50,22 +37,25 @@ class ContactViewModel {
     }
     
     func reloadData() {
-        guard let contact = contact else { return }
+        guard let contact = Contact.findByID(id: contactId) else {return}
         fullName.value = "\(contact.first_name) \(contact.last_name)"
         email.value = contact.email
         phoneNumber.value = contact.phone_number
         urlProfilPic.value = contact.profile_pic
         favorite.value = contact.favorite
+        didUpdateContact.value = indexPath
     }
     
     public func updateContact(favorite: Bool) {
-        guard let contact = contact else { return }
+        guard let contact = Contact.findByID(id: contactId) else {return}
         let params: [String: Any] = ["favorite": favorite]
         self.favoriteRequest = APIManager.APIContact.updateContact(contact.id, params: params){[weak self] (error, json) in
             if let error = error {
                 self?.updateErrorMessage.value = error.localizedDescription
             } else {
-                Contact.createOrUpdate(json)
+                Contact.createOrUpdate(json, completion: {c in
+                    self?.reloadData()
+                })
             }
         }
     }

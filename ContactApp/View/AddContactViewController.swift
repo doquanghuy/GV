@@ -16,7 +16,9 @@ class AddContactViewController: UIViewController {
     @IBOutlet weak var mobileTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     
+    weak var delegate: UpdateListContact?
     private let viewModel = AddContactViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         createGradientLayer()
@@ -45,16 +47,24 @@ class AddContactViewController: UIViewController {
     }
     
     private func setupBinding() {
-        viewModel.errorMessage.bind { (message) in
+        viewModel.errorMessage.bind {[weak self] (message) in
             guard let message = message else { return }
             DispatchQueue.main.async {
-                self.presentErrorAlert(message: message)
+                self?.presentErrorAlert(message: message)
             }
         }
         
-        viewModel.success.bind { (success) in
+        viewModel.success.bind {[weak self](success) in
             if success {
-                self.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.async {
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+        
+        viewModel.didAddContact.bind {[weak self] (section) in
+            DispatchQueue.main.async {
+                self?.delegate?.reload()
             }
         }
     }

@@ -84,8 +84,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="byH-jz-Qw7" kind="show" id="xnb-sa-8gq"/>
-                        <segue destination="1RX-7j-8vc" kind="push" identifier="pushAddContactSegue" id="ggj-tI-iIQ"/>
+                        <segue destination="byH-jz-Qw7" kind="show" identifier="pushDetailContactSegue" id="xnb-sa-8gq"/>
+                        <segue destination="1RX-7j-8vc" kind="show" identifier="pushAddContactSegue" id="ggj-tI-iIQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="joP-Qr-8NQ" userLabel="First Responder" sceneMemberID="firstResponder"/>

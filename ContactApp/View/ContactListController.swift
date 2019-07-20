@@ -4,8 +4,12 @@
 
 import UIKit
 
+protocol UpdateListContact: class {
+    func reload(at indexPath: IndexPath)
+    func reload()
+}
+
 class ContactListController: UITableViewController {
-    
     private let viewModel = ContactsViewModel()
     
     override func viewDidLoad() {
@@ -41,9 +45,20 @@ class ContactListController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constant.Segue.listToAdd {
+            let desVC = segue.destination as? AddContactViewController
+            desVC?.delegate = self
+        } else if segue.identifier == Constant.Segue.listToDetail {
+            let desVC = segue.destination as? DetailContactController
+            desVC?.viewModel = viewModel.contactViewModel(indexPath: sender as! IndexPath)
+            desVC?.delegate = self
+        }
+    }
+    
     // MARK: - IBAction
     @IBAction func addContactButtonClick(_ sender: Any) {
-        self.performSegue(withIdentifier: "pushAddContactSegue", sender: nil)
+        self.performSegue(withIdentifier:  Constant.Segue.listToAdd, sender: nil)
     }
 }
 
@@ -69,9 +84,17 @@ extension ContactListController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DetailContact") as? DetailContactController
-        vc?.viewModel = viewModel.contactViewModel(indexPath: indexPath)
-        self.navigationController?.pushViewController(vc!, animated: true)
+        self.performSegue(withIdentifier:  Constant.Segue.listToDetail, sender: indexPath)
+    }
+}
+
+extension ContactListController: UpdateListContact {
+    func reload(at indexPath: IndexPath) {
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
+    
+    func reload() {
+        self.tableView.reloadData()
     }
 }
 

@@ -10,9 +10,9 @@ import UIKit
 import Alamofire
 
 class AddContactViewModel {
-    
     var errorMessage = Dynamic<String?>(nil)
     var success = Dynamic<Bool>(false)
+    var didAddContact = Dynamic<Bool>(true)
     
     private var tempContact = Contact()
     private var request: Request?
@@ -38,7 +38,9 @@ class AddContactViewModel {
                 self?.errorMessage.value = error.localizedDescription
             } else {
                 self?.success.value = true
-                Contact.createOrUpdate(json)
+                Contact.createOrUpdate(json, completion: { (contact) in
+                    self?.didAddContact.value = true
+                })
             }
         }
     }

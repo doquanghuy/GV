@@ -7,7 +7,6 @@ import Foundation
 import Nuke
 
 class ContactListCell: UITableViewCell {
-    
     @IBOutlet weak var profilPicImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var favoriteButton: UIButton!
@@ -30,16 +29,16 @@ class ContactListCell: UITableViewCell {
     }
     
     private func bindingData() {
-        viewModel?.fullName.bind {(fullName) in
-            self.nameLabel.text = fullName
+        viewModel?.fullName.bind {[weak self](fullName) in
+            self?.nameLabel.text = fullName
         }
         
-        viewModel?.favorite.bind {(favorite) in
-            self.favoriteButton.isHidden = !favorite
+        viewModel?.favorite.bind {[weak self] (favorite) in
+            self?.favoriteButton.isHidden = !favorite
         }
         
-        viewModel?.urlProfilPic.bind {(imageURL) in
-            guard let url = imageURL, let profileURL = URL(string: url) else { return }
+        viewModel?.urlProfilPic.bind {[weak self](imageURL) in
+            guard let this = self, let url = imageURL, let profileURL = URL(string: url) else { return }
             DispatchQueue.main.async {
                 Nuke.loadImage(
                     with: profileURL,
@@ -47,7 +46,7 @@ class ContactListCell: UITableViewCell {
                         placeholder: UIImage(named: "placeholder_photo"),
                         transition: .fadeIn(duration: 0.33)
                     ),
-                    into: self.profilPicImageView
+                    into: this.profilPicImageView
                 )
             }
         }
