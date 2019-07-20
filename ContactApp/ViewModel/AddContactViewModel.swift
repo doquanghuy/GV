@@ -11,17 +11,16 @@ import Alamofire
 
 class AddContactViewModel {
     var errorMessage = Dynamic<String?>(nil)
-    var success = Dynamic<Bool>(false)
     var didAddContact = Dynamic<Bool>(true)
     
     private var tempContact = Contact()
     private var request: Request?
     func setFirstName(name: String?) {
-        self.tempContact.first_name = name ?? ""
+        self.tempContact.first_name = name ?? Constant.String.empty
     }
     
     func setLastName(name: String?) {
-        self.tempContact.last_name = name ?? ""
+        self.tempContact.last_name = name ?? Constant.String.empty
     }
     
     func setEmail(email: String?) {
@@ -36,12 +35,11 @@ class AddContactViewModel {
         self.request = APIManager.APIContact.createContact(tempContact) {[weak self] (error, json) in
             if let error = error {
                 self?.errorMessage.value = error.localizedDescription
-            } else {
-                self?.success.value = true
-                Contact.createOrUpdate(json, completion: { (contact) in
-                    self?.didAddContact.value = true
-                })
+                return
             }
+            Contact.createOrUpdate(json, completion: { (contact) in
+                self?.didAddContact.value = true
+            })
         }
     }
     

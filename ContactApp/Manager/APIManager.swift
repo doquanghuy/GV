@@ -20,7 +20,7 @@ struct APIManager {
     }
     
     static func apiEndPoint(endPoint: String, _ arguments: CVarArg...) -> String {
-        return Constant.BASE_URL + String(format: endPoint, arguments: arguments)
+        return Configuration.BASE_URL + String(format: endPoint, arguments: arguments)
     }
     
     static func request(url: String, method: Networking.HTTPMethod, params: [String: Any], encoding: Networking.ParamEncoding? = nil,

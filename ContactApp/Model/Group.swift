@@ -11,11 +11,11 @@ import SwiftyJSON
 import RealmSwift
 
 class Group: Object {
-    @objc dynamic var id: String = ""
+    @objc dynamic var id: String = Constant.String.empty
     var contacts = LinkingObjects(fromType: Contact.self, property: "group")
     
     override static func primaryKey() -> String {
-        return "id"
+        return Constant.ContactKeys.id
     }
 }
 

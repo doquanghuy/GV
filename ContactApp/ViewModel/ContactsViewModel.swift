@@ -10,7 +10,7 @@ class ContactsViewModel {
     var errorMessage = Dynamic<String?>(nil)
     
     private var request: Request?
-    private lazy var sections = Group.findAll().sorted(byKeyPath: "id")
+    private lazy var sections = Group.findAll().sorted(byKeyPath: Constant.ContactKeys.id)
     
     public func getContactList(){
         self.request = APIManager.APIContact.getContacts {[weak self] (error, json) in
@@ -42,8 +42,12 @@ class ContactsViewModel {
         return sections[section].contacts.count
     }
     
-    public var sectionNumber: Int {
+    public func sectionNumber() -> Int {
         return sections.count
+    }
+    
+    public func sectionIndexTitles() -> [String] {
+        return sections.map { $0.id}
     }
     
     deinit {

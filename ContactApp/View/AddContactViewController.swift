@@ -54,17 +54,10 @@ class AddContactViewController: UIViewController {
             }
         }
         
-        viewModel.success.bind {[weak self](success) in
-            if success {
-                DispatchQueue.main.async {
-                    self?.navigationController?.popViewController(animated: true)
-                }
-            }
-        }
-        
         viewModel.didAddContact.bind {[weak self] (section) in
             DispatchQueue.main.async {
                 self?.delegate?.reload()
+                self?.navigationController?.popViewController(animated: true)
             }
         }
     }
@@ -79,7 +72,7 @@ class AddContactViewController: UIViewController {
     private func createGradientLayer() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.headerView.bounds
-        gradientLayer.colors = [UIColor.white.cgColor, UIColor(red:0.31, green:0.89, blue:0.76, alpha:0.3).cgColor]
+        gradientLayer.colors = Constant.Color.gradientColors
         self.headerView.layer.insertSublayer(gradientLayer, at: 0)
     }
     

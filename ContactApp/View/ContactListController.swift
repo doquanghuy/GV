@@ -23,11 +23,9 @@ class ContactListController: UITableViewController {
     }
     
     private func setupBinding() {
-        viewModel.shouldReloadData.bind { (shouldReload) in
-            if shouldReload {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+        viewModel.shouldReloadData.bind { _ in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
         }
         viewModel.errorMessage.bind { (message) in
@@ -65,7 +63,7 @@ class ContactListController: UITableViewController {
 // MARK: - Table view data source
 extension ContactListController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.sectionNumber
+        return viewModel.sectionNumber()
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -85,6 +83,14 @@ extension ContactListController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.performSegue(withIdentifier:  Constant.Segue.listToDetail, sender: indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        return index
+    }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return self.viewModel.sectionIndexTitles()
     }
 }
 

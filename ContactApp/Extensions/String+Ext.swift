@@ -17,13 +17,4 @@ extension String {
         }
         return false
     }
-    
-    var indexInAlphabet: Int? {
-        for (index, c) in "abcdefghijklmnopqrstuvwxyz#".enumerated() {
-            if String(c) == self.lowercased() {
-                return index
-            }
-        }
-        return nil
-    }
 }

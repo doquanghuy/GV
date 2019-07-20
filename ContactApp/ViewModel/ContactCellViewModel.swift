@@ -11,7 +11,7 @@ import UIKit
 class ContactCellViewModel {
     private var contact: Contact?
     
-    var fullName = Dynamic<String>("")
+    var fullName = Dynamic<String>(Constant.String.empty)
     var urlProfilPic = Dynamic<String?>(nil)
     var favorite = Dynamic<Bool>(false)
     
@@ -21,7 +21,7 @@ class ContactCellViewModel {
     
     func reloadData() {
         guard let contact = contact else { return }
-        fullName.value = "\(contact.first_name) \(contact.last_name)"
+        fullName.value = contact.full_name
         urlProfilPic.value = contact.profile_pic
         favorite.value = contact.favorite
     }

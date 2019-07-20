@@ -30,15 +30,17 @@ class ContactViewModel {
         self.detailRequest = APIManager.APIContact.getContactDetail(contactId) {[weak self] (error, json) in
             if let error = error {
                 self?.errorMessage.value = error.localizedDescription
-            } else {
-                Contact.createOrUpdate(json)
+                return
             }
+            Contact.createOrUpdate(json, completion: {_ in
+                self?.reloadData()
+            })
         }
     }
     
     func reloadData() {
         guard let contact = Contact.findByID(id: contactId) else {return}
-        fullName.value = "\(contact.first_name) \(contact.last_name)"
+        fullName.value = contact.full_name
         email.value = contact.email
         phoneNumber.value = contact.phone_number
         urlProfilPic.value = contact.profile_pic
@@ -48,15 +50,15 @@ class ContactViewModel {
     
     public func updateContact(favorite: Bool) {
         guard let contact = Contact.findByID(id: contactId) else {return}
-        let params: [String: Any] = ["favorite": favorite]
+        let params: [String: Any] = [Constant.ContactKeys.favorite: favorite]
         self.favoriteRequest = APIManager.APIContact.updateContact(contact.id, params: params){[weak self] (error, json) in
             if let error = error {
                 self?.updateErrorMessage.value = error.localizedDescription
-            } else {
-                Contact.createOrUpdate(json, completion: {c in
-                    self?.reloadData()
-                })
+                return
             }
+            Contact.createOrUpdate(json, completion: {_ in
+                self?.reloadData()
+            })
         }
     }
     

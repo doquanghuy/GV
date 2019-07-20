@@ -11,7 +11,7 @@ class ContactListCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var favoriteButton: UIButton!
     
-    public static let reuseIdentifier = "ContactCell"
+    public static let reuseIdentifier = Constant.TableViewCell.listCell
     private var viewModel: ContactCellViewModel? {
         didSet {
             self.bindingData()
@@ -20,7 +20,7 @@ class ContactListCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        profilPicImageView.layer.cornerRadius = profilPicImageView.bounds.width/2
+        profilPicImageView.layer.cornerRadius = profilPicImageView.bounds.width / 2
     }
     
     public func setupViewModel(viewModel: ContactCellViewModel?) {
@@ -39,16 +39,14 @@ class ContactListCell: UITableViewCell {
         
         viewModel?.urlProfilPic.bind {[weak self](imageURL) in
             guard let this = self, let url = imageURL, let profileURL = URL(string: url) else { return }
-            DispatchQueue.main.async {
-                Nuke.loadImage(
-                    with: profileURL,
-                    options: ImageLoadingOptions(
-                        placeholder: UIImage(named: "placeholder_photo"),
-                        transition: .fadeIn(duration: 0.33)
-                    ),
-                    into: this.profilPicImageView
-                )
-            }
+            Nuke.loadImage(
+                with: profileURL,
+                options: ImageLoadingOptions(
+                    placeholder: UIImage(named: Constant.Image.placeHolder),
+                    transition: .fadeIn(duration: 0.33)
+                ),
+                into: this.profilPicImageView
+            )
         }
     }
 }

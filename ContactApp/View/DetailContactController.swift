@@ -20,12 +20,10 @@ class DetailContactController: UIViewController {
     var viewModel: ContactViewModel?
     weak var delegate: UpdateListContact?
     
-    let greenColor = UIColor(red:0.31, green:0.89, blue:0.76, alpha:1.0)
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createGradientLayer()
-        self.navigationController?.navigationBar.tintColor = greenColor
+        self.navigationController?.navigationBar.tintColor = Constant.Color.greenColor
         setupBinding()
         setupViewModel()
     }
@@ -70,7 +68,7 @@ class DetailContactController: UIViewController {
                 Nuke.loadImage(
                     with: profileURL,
                     options: ImageLoadingOptions(
-                        placeholder: UIImage(named: "placeholder_photo"),
+                        placeholder: UIImage(named: Constant.Image.placeHolder),
                         transition: .fadeIn(duration: 0.33)
                     ),
                     into: this.profilPicImageView
@@ -107,7 +105,7 @@ class DetailContactController: UIViewController {
     private func createGradientLayer() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.headerView.bounds
-        gradientLayer.colors = [UIColor.white.cgColor, UIColor(red:0.31, green:0.89, blue:0.76, alpha:0.3).cgColor]
+        gradientLayer.colors = Constant.Color.gradientColors
         self.headerView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
