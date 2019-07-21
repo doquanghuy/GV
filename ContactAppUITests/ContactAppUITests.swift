@@ -1,7 +1,3 @@
-//
-
-//
-
 import XCTest
 
 class ContactAppUITests: XCTestCase {
@@ -13,8 +9,8 @@ class ContactAppUITests: XCTestCase {
         continueAfterFailure = false
         
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-            app = XCUIApplication()
-            app.launch()
+        app = XCUIApplication()
+        app.launch()
         
         
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
@@ -85,7 +81,7 @@ class ContactAppUITests: XCTestCase {
     func testDidClickContactCell() {
         let contactListView = app.otherElements["ContactList"]
         XCTAssert(contactListView.exists)
-
+        
         sleep(1)
         XCTAssert(app.tables.element.exists)
         let cell = app.tables.cells["ContactCell_0_0"]
@@ -111,7 +107,7 @@ class ContactAppUITests: XCTestCase {
         sleep(1)
         XCTAssert(app.otherElements["MessageView"].exists)
     }
-
+    
     func testDetaiViewEmailButtonDidClick() {
         let contactListView = app.otherElements["ContactList"]
         XCTAssert(contactListView.exists)
@@ -129,4 +125,8 @@ class ContactAppUITests: XCTestCase {
         XCTAssert(app.otherElements["EmailView"].exists)
     }
 }
+
+
+//
+
 

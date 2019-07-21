@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SwiftyJSON
 
 class AddContactViewModel {
     var errorMessage = Dynamic<String?>(nil)
@@ -15,6 +16,12 @@ class AddContactViewModel {
     
     private var tempContact = Contact()
     private var request: Request?
+    private var provider: RealmProvider!
+    
+    init(realmProvider: RealmProvider = RealmProvider()) {
+        self.provider = realmProvider
+    }
+    
     func setFirstName(name: String?) {
         self.tempContact.first_name = name ?? Constant.String.empty
     }
@@ -31,15 +38,24 @@ class AddContactViewModel {
         self.tempContact.phone_number = mobile
     }
     
+    func createContact(contact: Contact, completion: ((_ error: Error?, _ json: JSON?) -> Void)? = nil) {
+        self.request = APIManager.APIContact.createContact(contact, completion: completion)
+    }
+    
+    func createContactLocal(json: JSON, completion: ((_ contact: Contact?) -> Void)? = nil) {
+        Contact.createOrUpdate(realmProvider: self.provider, true, json) {[weak self] (contact) in
+            self?.didAddContact.value = true
+            completion?(contact)
+        }
+    }
+    
     func createContact() {
-        self.request = APIManager.APIContact.createContact(tempContact) {[weak self] (error, json) in
+        self.createContact(contact: tempContact) {[weak self] (error, json) in
             if let error = error {
                 self?.errorMessage.value = error.localizedDescription
                 return
             }
-            Contact.createOrUpdate(json, completion: { (contact) in
-                self?.didAddContact.value = true
-            })
+            self?.createContactLocal(json: json!, completion: nil)
         }
     }
     

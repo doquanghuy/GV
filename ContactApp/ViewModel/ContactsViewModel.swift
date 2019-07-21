@@ -4,48 +4,57 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 class ContactsViewModel {
     var shouldReloadData = Dynamic<Bool>(false)
     var errorMessage = Dynamic<String?>(nil)
     
     private var request: Request?
-    private lazy var sections = Group.findAll().sorted(byKeyPath: Constant.GroupKeys.sortKey)
-    private var sectionsSorted = [[Contact]]()
+    private lazy var sections = Group.findAll(realmProvider: self.provider).sorted(byKeyPath: Constant.GroupKeys.sortKey)
+    private lazy var sectionsSorted = [[Contact]]()
+    private var provider: RealmProvider!
     private var sectionIds = [String]()
     
-    init() {
+    init(realmProvider: RealmProvider = RealmProvider()) {
+        self.provider = realmProvider
         self.resetSections()
     }
-    
-    public func getContactList(){
-        self.request = APIManager.APIContact.getContacts {[weak self] (error, json) in
+
+    public func getContactList() {
+        self.requestContactList {[weak self] (error, json) in
             if let error = error {
                 self?.errorMessage.value = error.localizedDescription
+                return
             }
-            Contact.createOrUpdate(json.arrayValue, completion: {contacts in
-                DispatchQueue.main.async {
-                    self?.resetSections()
-                    self?.shouldReloadData.value = true
-                }
-            })
+            self?.addContacts(json: json!)
+        }
+    }
+    
+    public func requestContactList(completion: ((_ error: Error?, _ json: JSON?) -> Void)?) {
+        self.request = APIManager.APIContact.getContacts(completion)
+    }
+    
+    public func addContacts(json: JSON, _ realmProvider: RealmProvider = RealmProvider(), _ completion: (([Contact]) -> Void)? = nil) {
+        Contact.createOrUpdate(realmProvider: realmProvider, true, json.arrayValue) {[weak self] contacts in
+            DispatchQueue.main.async {
+                self?.resetSections()
+                self?.shouldReloadData.value = true
+                completion?(contacts)
+            }
         }
     }
     
     public func resetSections() {
         var res = [[Contact]]()
         var ids = [String]()
-        let sections = Group.findAll().sorted(byKeyPath: Constant.GroupKeys.sortKey)
+        let sections = Group.findAll(realmProvider: self.provider).sorted(byKeyPath: Constant.GroupKeys.sortKey)
         for section in sections {
             res.append(section.contacts.sorted {$0.full_name < $1.full_name})
             ids.append(section.id)
         }
         sectionsSorted = res
         sectionIds = ids
-    }
-    
-    public func sortContact(contact1: Contact, and contact2: Contact) -> Bool {
-        return contact1.full_name < contact2.full_name
     }
     
     public func cellViewModel(indexPath: IndexPath) -> ContactCellViewModel? {
@@ -55,7 +64,7 @@ class ContactsViewModel {
     
     public func contactViewModel(indexPath: IndexPath) -> ContactViewModel? {
         guard !sections.isEmpty else { return nil }
-        return ContactViewModel(contactId: sectionsSorted[indexPath.section][indexPath.row].id, at: indexPath)
+        return ContactViewModel(contactId: sectionsSorted[indexPath.section][indexPath.row].id, realmProvider: self.provider)
     }
     public func numberOfRowsInSections(_ section: Int) -> Int {
         return sectionsSorted[section].count
@@ -76,7 +85,7 @@ class ContactsViewModel {
     public func loadDbStatus() -> Bool {
         return self.sections.count > 0
     }
-    
+
     deinit {
         self.request?.cancel()
     }

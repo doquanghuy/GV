@@ -16,14 +16,14 @@ protocol BaseModel {
 }
 
 extension BaseModel where Self: Object {
-    static func findByID(id: PrimaryKeyType) -> Self? {
-        let realm = try! Realm()
+    static func findByID(id: PrimaryKeyType, realmProvider: RealmProvider = RealmProvider(), _ isBackground: Bool = false) -> Self? {
+        let realm = realmProvider.realm
         realm.refresh()
         return realm.objects(Self.self).filter("\(Self.primaryKey() ?? "") == %@", id).first
     }
     
-    static func findAll() -> Results<Self> {
-        let realm = try! Realm()
+    static func findAll(realmProvider: RealmProvider = RealmProvider(), _ isBackground: Bool = false) -> Results<Self> {
+        let realm = realmProvider.realm
         realm.refresh()
         return realm.objects(Self.self)
     }

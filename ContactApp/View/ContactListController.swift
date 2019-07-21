@@ -5,7 +5,6 @@
 import UIKit
 
 protocol UpdateListContact: class {
-    func reload(at indexPath: IndexPath)
     func reload()
 }
 
@@ -139,4 +138,5 @@ extension ContactListController: UpdateListContact {
         self.tableView.reloadData()
     }
 }
+
 

@@ -88,7 +88,7 @@ class DetailContactController: UIViewController {
             }
         })
         
-        viewModel?.didUpdateContact.bind({[weak self] indexPath in
+        viewModel?.didUpdateContact.bind({[weak self] _ in
             DispatchQueue.main.async {
                 self?.delegate?.reload()
             }
