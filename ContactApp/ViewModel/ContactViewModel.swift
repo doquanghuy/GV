@@ -12,9 +12,9 @@ class ContactViewModel {
     private var contactId: Int!
     
     var shouldReloadData = Dynamic<Bool>(false)
+    var fullName = Dynamic<String>(Constant.String.empty)
     var errorMessage = Dynamic<String?>(nil)
     var updateErrorMessage = Dynamic<String?>(nil)
-    var fullName = Dynamic<String>("")
     var email = Dynamic<String?>(nil)
     var phoneNumber = Dynamic<String?>(nil)
     var urlProfilPic = Dynamic<String?>(nil)

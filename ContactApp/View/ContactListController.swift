@@ -101,6 +101,7 @@ extension ContactListController: UpdateListContact {
     }
     
     func reload() {
+        self.viewModel.resetSections()
         self.tableView.reloadData()
     }
 }

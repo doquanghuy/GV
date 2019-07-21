@@ -47,6 +47,7 @@ extension Contact: BaseModel {
                 if group == nil {
                     group = Group()
                     group?.id = firstCharacter
+                    group?.sortKey = firstCharacter.isAlphabet ? firstCharacter : Constant.String.sortKeyDefault
                 }
                 contact.group = group
                 realm.add(contact, update: true)
@@ -73,6 +74,7 @@ extension Contact: BaseModel {
                     if group == nil {
                         group = Group()
                         group?.id = firstCharacter
+                        group?.sortKey = firstCharacter.isAlphabet ? firstCharacter : Constant.String.sortKeyDefault
                     }
                     contact.group = group
                     contacts.append(contact)
