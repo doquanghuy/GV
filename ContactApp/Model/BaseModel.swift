@@ -22,7 +22,6 @@ extension BaseModel where Self: Object {
         return realm.objects(Self.self).filter("\(Self.primaryKey() ?? "") == %@", id).first
     }
     
-    
     static func findAll() -> Results<Self> {
         let realm = try! Realm()
         realm.refresh()

@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum RealmNotificationObjectType: String {
     case inital
     case change

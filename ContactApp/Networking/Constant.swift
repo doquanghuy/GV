@@ -27,6 +27,7 @@ struct Constant {
     struct String {
         static let defaultContactName = "#"
         static let empty = ""
+        static let sortKeyDefault = "ZZ"
     }
     
     struct Segue {
@@ -50,6 +51,14 @@ struct Constant {
         static let favorite = "favorite"
         static let email = "email"
         static let phoneNumber = "phone_number"
+        static let fullName = "full_name"
+    }
+    
+    struct GroupKeys {
+        static let id = "id"
+        static let contacts = "contacts"
+        static let contactSorted = "contactSorted"
+        static let sortKey = "sortKey"
     }
     
     struct Color {

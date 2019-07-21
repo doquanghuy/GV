@@ -12,10 +12,11 @@ import RealmSwift
 
 class Group: Object {
     @objc dynamic var id: String = Constant.String.empty
-    var contacts = LinkingObjects(fromType: Contact.self, property: "group")
-    
+    @objc dynamic var sortKey: String = Constant.String.empty
+    let contacts = LinkingObjects(fromType: Contact.self, property: "group")    
+
     override static func primaryKey() -> String {
-        return Constant.ContactKeys.id
+        return Constant.GroupKeys.id
     }
 }
 
