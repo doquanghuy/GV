@@ -1,11 +1,14 @@
 //
-
+//  RealmTests.swift
+//  ContactAppTests
+//
+//  Created by Quang Huy on 7/21/19.
+//  Copyright © 2019 RezaIlham. All rights reserved.
 //
 
 import XCTest
-@testable import ContactApp
 
-class ContactAppTests: XCTestCase {
+class RealmTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
