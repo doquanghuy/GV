@@ -116,6 +116,7 @@ class DetailContactController: UIViewController {
             if let phoneNumber = viewModel?.phoneNumber.value {
                 controller.recipients = [phoneNumber]
             }
+            controller.view.accessibilityIdentifier = "MessageView"
             controller.messageComposeDelegate = self
             self.present(controller, animated: true, completion: nil)
         }
@@ -137,6 +138,7 @@ class DetailContactController: UIViewController {
             if let email = viewModel?.email.value {
                 mailController.setToRecipients([email])
             }
+            mailController.view.accessibilityIdentifier = "EmailView"
             self.present(mailController, animated: true)
         }
     }
@@ -160,4 +162,3 @@ extension DetailContactController: MFMailComposeViewControllerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
 }
-

@@ -9,13 +9,23 @@ protocol UpdateListContact: class {
     func reload()
 }
 
-class ContactListController: UITableViewController {
+class ContactListController: UIViewController {
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
+    private var refreshControl = UIRefreshControl()
     private let viewModel = ContactsViewModel()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        shouldShowLoadingView()
         setupViewModel()
         setupBinding()
+    }
+    
+    private func setupUI() {
+        self.refreshControl.addTarget(self, action: #selector(reloadContactList), for: .valueChanged)
+        self.tableView.addSubview(self.refreshControl)
     }
     
     private func setupViewModel() {
@@ -25,15 +35,39 @@ class ContactListController: UITableViewController {
     private func setupBinding() {
         viewModel.shouldReloadData.bind { _ in
             DispatchQueue.main.async {
+                self.hideLoadingView()
+                self.refreshControl.endRefreshing()
                 self.tableView.reloadData()
             }
         }
         viewModel.errorMessage.bind { (message) in
+            self.hideLoadingView()
+            self.refreshControl.endRefreshing()
             guard let message = message else { return }
             DispatchQueue.main.async {
                 self.presentErrorAlert(message: message)
             }
         }
+    }
+    
+    private func shouldShowLoadingView() {
+        if viewModel.loadDbStatus() {
+            hideLoadingView()
+        }
+    }
+    
+    private func hideLoadingView() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.loadingView.alpha = 0
+            }) { (_) in
+                self.loadingView.isHidden = true
+            }
+        }
+    }
+    
+    @objc private func reloadContactList() {
+        viewModel.getContactList()
     }
     
     private func presentErrorAlert(message: String) {
@@ -61,35 +95,36 @@ class ContactListController: UITableViewController {
 }
 
 // MARK: - Table view data source
-extension ContactListController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
+extension ContactListController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.sectionNumber()
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return viewModel.titleForHeader(section)
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsInSections(section)
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactListCell.reuseIdentifier, for: indexPath) as? ContactListCell
+        cell?.accessibilityIdentifier = "ContactCell_\(indexPath.section)_\(indexPath.row)"
         let cellViewModel = viewModel.cellViewModel(indexPath: indexPath)
         cell?.setupViewModel(viewModel: cellViewModel)
         return cell!
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.performSegue(withIdentifier:  Constant.Segue.listToDetail, sender: indexPath)
     }
     
-    override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index
     }
     
-    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.viewModel.sectionIndexTitles()
     }
 }
