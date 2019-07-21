@@ -16,6 +16,7 @@ class ContactAppUITests: XCTestCase {
             app = XCUIApplication()
             app.launch()
         
+        
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
     
@@ -49,7 +50,7 @@ class ContactAppUITests: XCTestCase {
         
         app.navigationBars["Add Contact"].buttons["Done"].tap()
         sleep(3)
-        XCTAssert(app.tables.element.exists)
+        XCTAssert(app.otherElements["ContactList"].exists)
     }
     
     func testAddContactFail() {
@@ -77,11 +78,14 @@ class ContactAppUITests: XCTestCase {
         emailTextfiled.typeText("wrongemail")
         
         app.navigationBars["Add Contact"].buttons["Done"].tap()
-        sleep(3)
-        XCTAssert(app.tables.element.exists)
+        sleep(2)
+        XCTAssert(app.alerts.element.staticTexts["Email is invalid"].exists)
     }
     
     func testDidClickContactCell() {
+        let contactListView = app.otherElements["ContactList"]
+        XCTAssert(contactListView.exists)
+
         sleep(1)
         XCTAssert(app.tables.element.exists)
         let cell = app.tables.cells["ContactCell_0_0"]
@@ -92,6 +96,9 @@ class ContactAppUITests: XCTestCase {
     }
     
     func testDetaiViewMessageButtonDidClick() {
+        let contactListView = app.otherElements["ContactList"]
+        XCTAssert(contactListView.exists)
+        
         sleep(1)
         XCTAssert(app.tables.element.exists)
         let cell = app.tables.cells["ContactCell_0_0"]
@@ -106,6 +113,9 @@ class ContactAppUITests: XCTestCase {
     }
 
     func testDetaiViewEmailButtonDidClick() {
+        let contactListView = app.otherElements["ContactList"]
+        XCTAssert(contactListView.exists)
+        
         sleep(1)
         XCTAssert(app.tables.element.exists)
         let cell = app.tables.cells["ContactCell_0_0"]
@@ -118,19 +128,5 @@ class ContactAppUITests: XCTestCase {
         sleep(1)
         XCTAssert(app.otherElements["EmailView"].exists)
     }
-
-    func testDetaiViewCallButtonDidClick() {
-        sleep(1)
-        XCTAssert(app.tables.element.exists)
-        let cell = app.tables.cells["ContactCell_0_0"]
-        XCTAssert(cell.exists)
-        cell.tap()
-        let detailView = app.otherElements["DetailContact"]
-        XCTAssert(detailView.exists)
-        let callButton = detailView.buttons["CallButton"]
-        callButton.tap()
-        XCTAssertFalse(app.otherElements["EmailView"].exists)
-    }
-
 }
 

@@ -14,6 +14,10 @@ class ContactsViewModel {
     private var sectionsSorted = [[Contact]]()
     private var sectionIds = [String]()
     
+    init() {
+        self.resetSections()
+    }
+    
     public func getContactList(){
         self.request = APIManager.APIContact.getContacts {[weak self] (error, json) in
             if let error = error {
@@ -67,6 +71,10 @@ class ContactsViewModel {
     
     public func sectionIndexTitles() -> [String] {
         return sectionIds
+    }
+    
+    public func loadDbStatus() -> Bool {
+        return self.sections.count > 0
     }
     
     deinit {
