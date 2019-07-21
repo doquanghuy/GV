@@ -59,7 +59,6 @@
                                         <constraint firstItem="gff-GO-nPo" firstAttribute="leading" secondItem="HZ5-7c-Spq" secondAttribute="trailing" constant="16" id="zsw-6K-QVg"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <accessibility key="accessibilityConfiguration" identifier="ContactCell"/>
                                 <connections>
                                     <outlet property="favoriteButton" destination="gff-GO-nPo" id="QzE-NI-tlR"/>
                                     <outlet property="nameLabel" destination="HZ5-7c-Spq" id="QNJ-Wl-yYy"/>
@@ -173,6 +172,9 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4AI-Qt-OQp">
                                                         <rect key="frame" x="2.6666666666666643" y="0.0" width="44" height="44"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="MessageButton">
+                                                            <bool key="isElement" value="NO"/>
+                                                        </accessibility>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="6FU-tr-qoI"/>
                                                             <constraint firstAttribute="width" constant="44" id="OgK-mN-PDQ"/>
@@ -184,6 +186,9 @@
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIx-qC-m97">
                                                         <rect key="frame" x="82.666666666666686" y="0.0" width="44" height="44"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="CallButton">
+                                                            <bool key="isElement" value="NO"/>
+                                                        </accessibility>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="76P-tm-fFS"/>
                                                             <constraint firstAttribute="width" constant="44" id="CAl-Bl-bW8"/>
@@ -195,6 +200,9 @@
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j3F-jj-4us">
                                                         <rect key="frame" x="162.66666666666669" y="0.0" width="44" height="44"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="EmailButton">
+                                                            <bool key="isElement" value="NO"/>
+                                                        </accessibility>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="7SB-ba-hbN"/>
                                                             <constraint firstAttribute="width" constant="44" id="SCe-th-uAe"/>
@@ -353,6 +361,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="db2-ft-R3Z">
+                                <rect key="frame" x="87" y="384" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bxq-AK-OUa">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>

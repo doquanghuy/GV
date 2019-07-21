@@ -24,7 +24,6 @@ class ContactAppUITests: XCTestCase {
     }
     
     func testAddContactSuccess() {
-        XCTAssert(app.tables.element.exists)
         app.navigationBars["Contact"].buttons["Add"].tap()
         let contactView = app.otherElements["AddContactView"]
         XCTAssert(contactView.exists)
@@ -54,7 +53,6 @@ class ContactAppUITests: XCTestCase {
     }
     
     func testAddContactFail() {
-        XCTAssert(app.tables.element.exists)
         app.navigationBars["Contact"].buttons["Add"].tap()
         let contactView = app.otherElements["AddContactView"]
         XCTAssert(contactView.exists)
@@ -84,13 +82,55 @@ class ContactAppUITests: XCTestCase {
     }
     
     func testDidClickContactCell() {
-        XCTAssert(app.tables.element.exists)
         sleep(1)
+        XCTAssert(app.tables.element.exists)
         let cell = app.tables.cells["ContactCell_0_0"]
         XCTAssert(cell.exists)
         cell.tap()
         let detailView = app.otherElements["DetailContact"]
         XCTAssert(detailView.exists)
     }
+    
+    func testDetaiViewMessageButtonDidClick() {
+        sleep(1)
+        XCTAssert(app.tables.element.exists)
+        let cell = app.tables.cells["ContactCell_0_0"]
+        XCTAssert(cell.exists)
+        cell.tap()
+        let detailView = app.otherElements["DetailContact"]
+        XCTAssert(detailView.exists)
+        let messageButton = detailView.buttons["MessageButton"]
+        messageButton.tap()
+        sleep(1)
+        XCTAssert(app.otherElements["MessageView"].exists)
+    }
+
+    func testDetaiViewEmailButtonDidClick() {
+        sleep(1)
+        XCTAssert(app.tables.element.exists)
+        let cell = app.tables.cells["ContactCell_0_0"]
+        XCTAssert(cell.exists)
+        cell.tap()
+        let detailView = app.otherElements["DetailContact"]
+        XCTAssert(detailView.exists)
+        let emailButton = detailView.buttons["EmailButton"]
+        emailButton.tap()
+        sleep(1)
+        XCTAssert(app.otherElements["EmailView"].exists)
+    }
+
+    func testDetaiViewCallButtonDidClick() {
+        sleep(1)
+        XCTAssert(app.tables.element.exists)
+        let cell = app.tables.cells["ContactCell_0_0"]
+        XCTAssert(cell.exists)
+        cell.tap()
+        let detailView = app.otherElements["DetailContact"]
+        XCTAssert(detailView.exists)
+        let callButton = detailView.buttons["CallButton"]
+        callButton.tap()
+        XCTAssertFalse(app.otherElements["EmailView"].exists)
+    }
+
 }
 
